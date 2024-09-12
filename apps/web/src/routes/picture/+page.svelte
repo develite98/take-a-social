@@ -25,7 +25,7 @@
 	<Block strong>
 		<p>#hastag1, #hastag2</p>
 
-		<div class="mt-4 text-xl">Thank you very much</div>
+		<div class="mt-4 text-xl">Thank you very much, love you </div>
 	</Block>
 
 	<Fab
