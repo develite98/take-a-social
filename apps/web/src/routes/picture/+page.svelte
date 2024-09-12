@@ -45,6 +45,7 @@
 	<meta property="og:title" content="Trung Nguyen Legend" />
 	<meta property="og:description" content="Thank you verymuch." />
     <meta property="fb:app_id" content="1496238194355915" />
+    <meta property="fb:page_id" content="1496238194355915" />
 	<meta
 		property="og:image"
 		content="https://images6.alphacoders.com/134/1348908.jpeg"
