@@ -19,7 +19,7 @@
 
 <Page>
 	<div class="p-4 pt-12">
-		<img class="rounded-lg" src={'meeting-wallpaper.jpg'} alt="" />
+		<img class="rounded-lg" src={'https://images6.alphacoders.com/134/1348908.jpeg'} alt="" />
 	</div>
 
 	<Block strong>
@@ -42,12 +42,15 @@
 </Page>
 
 <svelte:head>
-	<meta property="og:title" content="Your Page Title" />
-	<meta property="og:description" content="This is a description for the shared content." />
+	<meta property="og:title" content="Trung Nguyen Legend" />
+	<meta property="og:description" content="Thank you verymuch." />
 	<meta
 		property="og:image"
-		content="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScgb8ukaN02C--nk6x4kriWfkpStKaTnQdQA&s"
+		content="https://images6.alphacoders.com/134/1348908.jpeg"
 	/>
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
 	<meta property="og:url" content="https://trungnguyenlegend.com" />
 	<meta property="og:type" content="website" />
 	<meta property="og:locale" content="en_US" />
