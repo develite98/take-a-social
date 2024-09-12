@@ -7,6 +7,8 @@ export default defineConfig({
     include: ['src/**/*.{test,spec}.{js,ts}']
   },
   build: {
+    outDir: 'public',
+    emptyOutDir: true,
     commonjsOptions: {
       include: [/@repo\/ui/, /node_modules/],
     },
