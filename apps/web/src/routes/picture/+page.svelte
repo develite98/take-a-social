@@ -9,11 +9,20 @@
 	function openFacebookShareDialog() {
 		const shareUrl = window.location.href;
 		const redirectUrl = window.location.href;
-
-		const shareDialogUrl = `https://www.facebook.com/dialog/share?app_id=${fbAppId}?&hashtag=${encodeURIComponent('#hastag1 #hastag2')}&display=page&quote=${encodeURIComponent(message)}&href=${encodeURIComponent(shareUrl)}&redirect_uri=${encodeURIComponent(redirectUrl)}`;
-
-		// Open the Facebook share dialog in a new window
-		window.open(shareDialogUrl, '_self', 'width=600,height=400');
+		// @ts-ignore
+		FB.ui(
+			{
+				method: 'share',
+                display: 'page',
+                href: shareUrl,
+                hashtag: '#hastag1 #hastag2',
+				// @ts-ignore
+			},
+			// @ts-ignore
+			function (response) {
+                console.log(response)
+            }
+		);
 	}
 </script>
 
@@ -25,7 +34,7 @@
 	<Block strong>
 		<p>#hastag1, #hastag2</p>
 
-		<div class="mt-4 text-xl">Thank you very much, love you </div>
+		<div class="mt-4 text-xl">Thank you very much, love you</div>
 	</Block>
 
 	<Fab
@@ -44,14 +53,11 @@
 <svelte:head>
 	<meta property="og:title" content="Trung Nguyen Legend" />
 	<meta property="og:description" content="Thank you verymuch." />
-    <meta property="fb:app_id" content="888715703203677" />
-    <meta property="fb:page_id" content="888715703203677" />
-	<meta
-		property="og:image"
-		content="https://images6.alphacoders.com/134/1348908.jpeg"
-	/>
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+	<meta property="fb:app_id" content="888715703203677" />
+	<meta property="fb:page_id" content="888715703203677" />
+	<meta property="og:image" content="https://images6.alphacoders.com/134/1348908.jpeg" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
 
 	<meta property="og:url" content="https://trungnguyenlegend.com" />
 	<meta property="og:type" content="website" />
