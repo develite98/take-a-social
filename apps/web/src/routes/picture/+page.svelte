@@ -13,7 +13,7 @@
 		const shareDialogUrl = `https://www.facebook.com/dialog/share?app_id=${fbAppId}?&hashtag=${encodeURIComponent('#hastag1 #hastag2')}&display=page&quote=${encodeURIComponent(message)}&href=${encodeURIComponent(shareUrl)}&redirect_uri=${encodeURIComponent(redirectUrl)}`;
 
 		// Open the Facebook share dialog in a new window
-		window.open(shareDialogUrl, '_blank', 'width=600,height=400');
+		window.open(shareDialogUrl, '_self', 'width=600,height=400');
 	}
 </script>
 
@@ -44,6 +44,7 @@
 <svelte:head>
 	<meta property="og:title" content="Trung Nguyen Legend" />
 	<meta property="og:description" content="Thank you verymuch." />
+    <meta property="fb:app_id" content="1496238194355915" />
 	<meta
 		property="og:image"
 		content="https://images6.alphacoders.com/134/1348908.jpeg"
