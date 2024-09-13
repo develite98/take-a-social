@@ -19,17 +19,17 @@
 		const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 		const shareUrl = window.location.href;
 
-		if (isMobile) {
-			// Attempt to open Facebook's native app with the share dialog
-			const fbAppUrl = `fb://faceweb/f?href=https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}&quote=${encodeURIComponent(hashtags)}`;
-			// Try opening the Facebook app
-			window.open(fbAppUrl);
-		} else {
+		// if (isMobile) {
+		// 	// Attempt to open Facebook's native app with the share dialog
+		// 	const fbAppUrl = `fb://faceweb/f?href=https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}&quote=${encodeURIComponent(hashtags)}`;
+		// 	// Try opening the Facebook app
+		// 	window.open(fbAppUrl);
+		// } else {
 			// @ts-ignore
 			FB.ui(
 				{
 					method: 'share',
-					display: 'popup',
+					display: 'touch',
 					href: shareUrl,
 					hashtag: hashtags
 					// @ts-ignore
@@ -39,7 +39,7 @@
 					console.log(response);
 				}
 			);
-		}
+		// }
 	}
 
 	$: currentLocale = $locale || 'vi';
