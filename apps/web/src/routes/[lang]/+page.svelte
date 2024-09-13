@@ -40,10 +40,7 @@
 		</div>
 	</div>
 
-
-	<!-- <img class="fixed bottom-2 w-[40vw] -right-3" src="cafe.png" alt="Trung Nguyên Legend" /> -->
-
-	<div class="fixed bottom-2 left-1/2 -translate-x-1/2">
+	<div class="fixed bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center">
 		<Segmented strong rounded>
 			<SegmentedButton
 			  strong style="height: 1.75rem;"
@@ -62,8 +59,11 @@
 			<span class="whitespace-nowrap text-xs">English</span>
 			</SegmentedButton>
 		  </Segmented>
-	</div>
 
+		  <div class="text-center mt-2">
+			  Developed By Mixcore.Studio
+		  </div>
+	</div>
 </Page>
 
 <style>
