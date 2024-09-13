@@ -8,7 +8,7 @@
 </script>
 
 <script lang="ts">
-	import { locale, _ } from 'svelte-i18n';
+	import { locale, t, setLocale, setRoute } from '$lib/translations';
 	import { goto } from '$app/navigation';
 	import { Page, SegmentedButton, Segmented } from 'konsta/svelte';
 	import { onMount } from 'svelte';
@@ -73,7 +73,7 @@
 			<img class="w-[220px]" src="/logo.png" alt="Trung Nguyên E-Coffee" />
 		</div>
 		<h2 class="font-title text-lg text-center px-6 mt-2 text-[#42201A]">
-			{'Hội thảo nhượng quyền'} <br /> {'Trung Nguyên E-Coffee'}
+			{$t('common.title')} <br /> {'Trung Nguyên E-Coffee'}
 		</h2>
 
 		<div class="leading-7 text-center mt-2 px-4 italic text-base">
@@ -135,8 +135,8 @@
 				strong
 				style="height: 1.75rem;"
 				rounded
-				active={activeSegmented === 1}
-				onClick={() => locale.set('vi')}
+				active={$locale === 'vi'}
+				onClick={() => setLocale('vi')}
 			>
 				<span class="whitespace-nowrap text-xs">Tiếng Việt</span>
 			</SegmentedButton>
@@ -144,8 +144,8 @@
 				strong
 				style="height: 1.75rem;"
 				rounded
-				active={activeSegmented === 3}
-				onClick={() => locale.set('en')}
+				active={$locale === 'en'}
+				onClick={() => setLocale('en')}
 			>
 				<span class="whitespace-nowrap text-xs">English</span>
 			</SegmentedButton>

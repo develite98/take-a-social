@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { Page } from 'konsta/svelte';
 	import { locale, _ } from 'svelte-i18n';
+	import { t } from '$lib/translations';
 	import { client } from '$lib/storage/client';
 	import { Storage } from 'appwrite';
 	import { page } from '$app/stores';
@@ -34,7 +35,11 @@
 
 	function copyUrl() {
 		navigator.clipboard
-			.writeText(hashtags)
+			.writeText(
+				`${hashtags}
+				
+				${window.location.href}`
+			)
 			.then(() => {
 				isCopySuccess = true;
 			})
@@ -74,15 +79,29 @@
 		<div class="flex justify-center mt-4 gap-2">
 			{#if isCopySuccess}
 				<div class="flex flex-col gap-1 items-center">
-					<button
-						on:click={openFacebookShareDialog}
-						class="active:bg-gray-100 active:scale-95 trasition-all font-title text-lg px-4 py-2 rounded-lg border border-dashed border-gray-300 flex items-center gap-2"
-					>
-						<img src="/fb-logo.png" class=" w-4 h-4 inline-flex -mt-1" alt="Checkin" />
+					<div class="flex w-full gap-1">
+						<button
+							on:click={goBack}
+							class="active:bg-gray-100 active:scale-95 trasition-all font-title text-lg px-4 py-2 rounded-lg border border-dashed border-gray-300 flex items-center gap-2"
+						>
+							<img src="/back-arrow.svg" class=" w-4 h-4 inline-flex -mt-2" alt="Checkin" />
+						</button>
 
-						Chia sẽ đến FB
-					</button>
-					<div class="text-green-500 animate-bounce mt-2 text-[14px]" transition:fade={{ delay: 50, duration: 200 }}> ✅ Đã sao chép #hashtag</div>
+						<button
+							on:click={openFacebookShareDialog}
+							class="active:bg-gray-100 active:scale-95 trasition-all font-title text-lg px-4 py-2 rounded-lg border border-dashed border-gray-300 flex items-center gap-2"
+						>
+							<img src="/fb-logo.png" class=" w-4 h-4 inline-flex -mt-1" alt="Checkin" />
+							{$t('common.sharing')}
+						</button>
+					</div>
+
+					<div
+						class="text-green-500 animate-bounce mt-2 text-[14px]"
+						transition:fade={{ delay: 50, duration: 200 }}
+					>
+						✅ {$t('common.copied')} #hashtag
+					</div>
 				</div>
 			{:else}
 				<button
@@ -97,10 +116,14 @@
 					class="active:bg-gray-100 active:scale-95 trasition-all font-title text-lg px-4 py-2 rounded-lg border border-dashed border-gray-300 flex items-center gap-2"
 				>
 					<img src="/coffee-cup.svg" class=" w-4 h-4 inline-flex -mt-2" alt="Checkin" />
-					Chia sẻ
+					{$t('common.shareLabel')}
 				</button>
 			{/if}
 		</div>
+	</div>
+
+	<div class="fixed bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center">
+		<div class="text-center mt-4 mb-2">Developed by <a href="https://mixcore.studio/" class="text-primary">Mixcore.Studio</a></div>
 	</div>
 </Page>
 

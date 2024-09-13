@@ -1,12 +1,21 @@
-// hooks.server.ts
-import type { Handle } from '@sveltejs/kit'
-import { locale } from 'svelte-i18n'
+import { loadTranslations } from '$lib/translations';
 
-export const handle: Handle = async ({ event, resolve }) => {
-	const lang = event.request.headers.get('accept-language')?.split(',')[0]
-	if (lang) {
-		locale.set(lang)
-	}
-    
-	return resolve(event)
-}
+/** @type {import('@sveltejs/kit').Handle} */
+export const handle = async ({ event, resolve }) => {
+
+  // Add html `lang` attribute
+  return resolve({ ...event, locals: { lang: 'vi' } }, {
+    transformPageChunk: ({ html }) => html.replace(/<html.*>/, `<html lang="${'vi'}">`),
+  });
+};
+
+
+/** @type {import('@sveltejs/kit').HandleServerError} */
+export const handleError = async ({ event }) => {
+  const { locals } = event;
+  const { lang } = locals;
+
+  await loadTranslations(lang, 'error');
+
+  return locals;
+};

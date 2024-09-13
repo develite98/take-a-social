@@ -1,13 +1,14 @@
-import { browser } from '$app/environment'
-import { initI18n } from '$lib/i18n'
-import { locale, waitLocale } from 'svelte-i18n'
-import type { LayoutLoad } from './$types'
+import { addTranslations, setLocale, setRoute } from '$lib/translations';
 
-export const load: LayoutLoad = async () => {
-    initI18n();
-	if (browser) {
-		locale.set(window.navigator.language)
-	}
+/** @type {import('@sveltejs/kit').LayoutLoad} */
+export const load = async ({ data }) => {
+  const { i18n, translations } = data;
+  const { lang } = i18n;
 
-	await waitLocale()
-}
+  addTranslations(translations);
+
+  await setRoute(i18n.route);
+  await setLocale(lang);
+
+  return i18n;
+};
