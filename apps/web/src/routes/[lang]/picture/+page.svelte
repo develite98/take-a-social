@@ -9,14 +9,14 @@
 		const shareUrl = window.location.href;
 		if (isMobile) {
 			// Attempt to open Facebook's native app with the share dialog
-			const fbAppUrl = `fb://faceweb/f?href=https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}`;
+			const fbAppUrl = `fb://faceweb/f?href=https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}&quote=${encodeURIComponent(hashtags)}`;
 			// Try opening the Facebook app
 			window.location.href = fbAppUrl;
 			// Optional: Provide a fallback after a delay if the Facebook app doesn't open (depends on the device/browser behavior)
 			setTimeout(() => {
 				// Fallback to opening in a new tab if deep linking fails
 				window.open(
-					`https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}`,
+					`https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}&quote=${encodeURIComponent(hashtags)}`,
 					'_blank'
 				);
 			}, 2000);
@@ -27,7 +27,7 @@
 					method: 'share',
 					display: 'popup',
 					href: shareUrl,
-					hashtag: '#hastag1 #hastag2'
+					hashtag: hashtags
 					// @ts-ignore
 				},
 				// @ts-ignore
