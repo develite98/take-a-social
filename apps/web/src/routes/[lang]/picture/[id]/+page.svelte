@@ -38,7 +38,7 @@
 			.writeText(
 				`${hashtags}
 				
-				${window.location.href}`
+${window.location.href}`
 			)
 			.then(() => {
 				isCopySuccess = true;
