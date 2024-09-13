@@ -58,13 +58,17 @@
 
 		const fpShareUrl = `https://m.facebook.com/dialog/share?
 					app_id=${fbAppId}
-					&display=popup
+					&display=popup	
 					&href=${encodeURIComponent(shareUrl)}
 					&quote=${encodeURIComponent(hashtags)}
 					&hashtag=${encodeURIComponent(hashtags)}
 					&redirect_uri=${encodeURIComponent(shareUrl)}`
 
-		window.open(fpShareUrl, '_blank', 'noopener,noreferrer');
+		setTimeout(() => {
+			window.location.href = fpShareUrl
+		}, 100)
+
+		// window.open(fpShareUrl, '_blank', 'noopener,noreferrer');
 
 		// if (isMobile) {
 		// 	// Attempt to open Facebook's native app with the share dialog
