@@ -14,6 +14,7 @@
 	import { onMount } from 'svelte';
 	import { client } from '$lib/storage/client';
 	import { Storage, ID } from 'appwrite';
+	import { page } from '$app/stores';
 
 	export let lang;
 	let activeSegmented = 1;
@@ -69,13 +70,13 @@
 <Page>
 	<div class="w-full h-full main-app max-w-96 mx-auto">
 		<div class="flex px-4 pb-4 pt-[8vh] justify-center">
-			<img src="/logo.png" alt="Trung Nguyên E-Coffee" />
+			<img class="w-[120px]" src="/logo.png" alt="Trung Nguyên E-Coffee" />
 		</div>
 		<h2 class="font-title text-lg text-center px-6 mt-2 text-[#42201A]">
 			{'Hội thảo nhượng quyền'} <br /> {'Trung Nguyên E-Coffee'}
 		</h2>
 
-		<div class="leading-5 text-center mt-2 px-4 italic">
+		<div class="leading-7 text-center mt-2 px-4 italic text-base">
 			Viện Hàn Lâm Vỉa Hè <br /> Cộng Đồng ba nền văn minh cà phê <br /> Tinh hoa hội tụ
 		</div>
 
@@ -97,13 +98,13 @@
 				class:opacity-60={uploading}
 				class:pointer-events-none={uploading}
 				on:click={() => triggerFileInput()}
-				class="active:bg-gray-100 active:scale-95 trasition-all font-title text-lg px-4 py-2 rounded-lg border border-dashed border-gray-300 flex items-center gap-2"
+				class="active:bg-gray-100 active:scale-95 trasition-all font-title text-sm px-4 py-4 pt-5 rounded-lg border border-dashed border-gray-300 flex flex-col justify-center items-center gap-2"
 			>
 				{#if uploading}
 					<svg
 						aria-hidden="true"
 						role="status"
-						class="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600 -mt-2"
+						class="inline w-4 h-4 text-gray-200 animate-spin dark:text-gray-600"
 						viewBox="0 0 100 101"
 						fill="none"
 						xmlns="http://www.w3.org/2000/svg"
@@ -120,8 +121,10 @@
 				{:else}
 					<img src="coffee-cup.svg" class=" w-4 h-4 inline-flex -mt-2" alt="Checkin" />
 				{/if}
+				<div>
+					Chọn ảnh đẹp của bạn <br> tại đây
+				</div>
 
-				Checkin
 			</button>
 		</div>
 	</div>
@@ -148,7 +151,7 @@
 			</SegmentedButton>
 		</Segmented>
 
-		<div class="text-center mt-2">Developed By Mixcore.Studio</div>
+		<div class="text-center mt-4 mb-2">Developed by <a href="https://mixcore.studio/">Mixcore.Studio</a></div>
 	</div>
 </Page>
 
@@ -156,10 +159,12 @@
 	<meta property="og:title" content="Trung Nguyên E-Coffee | Hội thảo nhượng quyền" />
 	<meta property="og:description" content="Cảm ơn quý khách" />
 
-	<meta property="og:url" content="https://trungnguyenlegend.com" />
+	<meta property="og:url" content="{$page.url.href}" />
+	<meta property="og:image" content="/banner.jpg" />
 	<meta property="og:type" content="website" />
 	<meta property="og:locale" content="en_US" />
-	<meta property="og:site_name" content="Your Website Name" />
+	<meta property="og:site_name" content="Trung Nguyên E-Coffee" />
+
 </svelte:head>
 
 <style>

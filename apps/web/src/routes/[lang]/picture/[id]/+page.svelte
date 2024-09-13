@@ -58,7 +58,7 @@
 <Page>
 	<div class="w-full h-full main-app max-w-96">
 		<div class="flex px-4 pb-4 pt-[8vh] justify-center">
-			<img src="/logo.png" alt="Trung Nguyên E-Coffee" />
+			<img class="w-[120px]" src="/logo.png" alt="Trung Nguyên E-Coffee" />
 		</div>
 
 		<h2 class="font-title text-lg text-center px-6 mt-2 text-[#42201A]">
@@ -102,9 +102,7 @@
 	<meta property="fb:app_id" content={fbAppId} />
 	<meta property="fb:page_id" content={fbAppId} />
 	<meta property="og:image" content={file.href} />
-	<meta property="og:image:width" content="1200" />
-	<meta property="og:image:height" content="630" />
-	<meta property="og:url" content={$page.url.href} />
+	<meta property="og:url" content={$page.url.href || '/banner.jpg'} />
 
 	<meta property="og:type" content="website" />
 	<meta property="og:locale" content="en_US" />

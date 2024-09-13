@@ -11,6 +11,7 @@
 	import { locale, _ } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
 	import { Page, SegmentedButton, Segmented } from 'konsta/svelte';
+	import { page } from '$app/stores';
 
 	export let lang;
 	let activeSegmented = 1;
@@ -22,7 +23,7 @@
 <Page>
 	<div class="w-full h-full main-app max-w-96 mx-auto">
 		<div class="flex px-4 pb-4 pt-[8vh] justify-center">
-			<img src="/logo.png" alt="Trung Nguyên E-Coffee" />
+			<img class="w-[120px]" src="/logo.png" alt="Trung Nguyên E-Coffee" />
 		</div>
 		<h2 class="font-title text-lg text-center px-6 mt-2 text-[#42201A]">
 			Hội thảo nhượng quyền <br /> Trung Nguyên E-Coffee
@@ -70,7 +71,8 @@
 	<meta property="og:title" content="Trung Nguyên E-Coffee | Hội thảo nhượng quyền" />
 	<meta property="og:description" content="Cảm ơn quý khách" />
 
-	<meta property="og:url" content="https://trungnguyenlegend.com" />
+	<meta property="og:url" content="{$page.url.href}" />
+	<meta property="og:image" content="/banner.jpg" />
 	<meta property="og:type" content="website" />
 	<meta property="og:locale" content="en_US" />
 	<meta property="og:site_name" content="Your Website Name" />

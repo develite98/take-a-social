@@ -16,7 +16,7 @@
 				appId: '888715703203677',
 				status: true,
 				xfbml: true,
-				version: 'v2.3'
+				version: 'v20.0'
 			});
 		};
 	});
