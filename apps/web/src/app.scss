@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+	font-family: 'TrajanPro3';
+	src: url('/fonts/TrajanPro3-Bold.otf') format('opentype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+.font-title {
+    font-family: 'TrajanPro3';
+    font-weight: bold;
+}

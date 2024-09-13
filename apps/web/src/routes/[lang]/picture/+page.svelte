@@ -1,0 +1,100 @@
+<script>
+	import { Page } from 'konsta/svelte';
+
+	const fbAppId = '888715703203677';
+	const hashtags = '#TrungNguyenEcoffee #3nenVanMinhCaPhe #TinhHoaHoiTu';
+
+	function openFacebookShareDialog() {
+		const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+		const shareUrl = window.location.href;
+		if (isMobile) {
+			// Attempt to open Facebook's native app with the share dialog
+			const fbAppUrl = `fb://faceweb/f?href=https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}`;
+			// Try opening the Facebook app
+			window.location.href = fbAppUrl;
+			// Optional: Provide a fallback after a delay if the Facebook app doesn't open (depends on the device/browser behavior)
+			setTimeout(() => {
+				// Fallback to opening in a new tab if deep linking fails
+				window.open(
+					`https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}`,
+					'_blank'
+				);
+			}, 2000);
+		} else {
+			// @ts-ignore
+			FB.ui(
+				{
+					method: 'share',
+					display: 'popup',
+					href: shareUrl,
+					hashtag: '#hastag1 #hastag2'
+					// @ts-ignore
+				},
+				// @ts-ignore
+				function (response) {
+					console.log(response);
+				}
+			);
+		}
+	}
+</script>
+
+<Page>
+	<div class="w-full h-full main-app max-w-96">
+		<div class="flex px-4 pb-4 pt-[8vh] justify-center">
+			<img src="/logo.png" alt="Trung Nguyên Legend" />
+		</div>
+
+		<h2 class="font-title text-lg text-center px-6 mt-2 text-[#42201A]">
+			Hội thảo nhượng quyền <br /> Trung Nguyên E-Coffee
+		</h2>
+
+		<div class="p-2 m-4 rounded-lg border border-dashed border-gray-300 h-[30vh]">
+			<img
+				class="rounded-lg h-full w-full"
+				src={'https://images6.alphacoders.com/134/1348908.jpeg'}
+				alt=""
+			/>
+		</div>
+
+		<div class="flex justify-center w-3/4 text-center mx-auto leading-2" style="line-height: 1.5;">
+			{hashtags.split(' ').join(', ')}
+		</div>
+
+		<div class="flex justify-center mt-4">
+			<button
+				on:click={openFacebookShareDialog}
+				class="active:bg-gray-100 active:scale-95 trasition-all font-title text-lg px-4 py-2 rounded-lg border border-dashed border-gray-300 flex items-center gap-2"
+			>
+				<img src="/coffee-cup.svg" class=" w-4 h-4 inline-flex -mt-2" alt="Checkin" />
+				Chia sẻ Facebook
+			</button>
+		</div>
+	</div>
+</Page>
+
+<svelte:head>
+	<meta property="og:title" content="Trung Nguyen Legend" />
+	<meta property="og:description" content="Thank you verymuch." />
+	<meta property="fb:app_id" content="888715703203677" />
+	<meta property="fb:page_id" content="888715703203677" />
+	<meta property="og:image" content="https://images6.alphacoders.com/134/1348908.jpeg" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+
+	<meta property="og:url" content="https://trungnguyenlegend.com" />
+	<meta property="og:type" content="website" />
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:site_name" content="Your Website Name" />
+
+	<!-- Optional: Facebook App ID -->
+	<meta property="fb:app_id" content={fbAppId} />
+</svelte:head>
+
+<style>
+	.main-app {
+		background-image: url('/background.jpg');
+		background-size: cover;
+		background-repeat: no-repeat;
+	}
+</style>

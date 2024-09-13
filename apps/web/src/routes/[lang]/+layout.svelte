@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
-	import '../app.scss';
+	import '../../app.scss';
+	import { isLoading } from 'svelte-i18n'
 
 	onMount(() => {
 		// @ts-ignore
@@ -15,4 +16,10 @@
 	});
 </script>
 
-<slot />
+
+{#if !$isLoading}
+<div class="max-w-96">
+	<slot />
+</div>
+{/if}
+

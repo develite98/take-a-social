@@ -18,7 +18,8 @@
 		"@repo/ui": "workspace:*",
 		"@sveltejs/adapter-vercel": "^5.4.3",
 		"framework7-icons": "^5.0.5",
-		"konsta": "^4.0.0"
+		"konsta": "^4.0.0",
+		"svelte-i18n": "^4.0.0"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.42.1",
