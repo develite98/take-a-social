@@ -19,11 +19,16 @@
 		const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 		const shareUrl = window.location.href;
 
+			// 	const fbAppUrl = `fb://faceweb/f?href=https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}&quote=${encodeURIComponent(hashtags)}`;
+			// // Try opening the Facebook app
+			// window.open(fbAppUrl);
+
 		// @ts-ignore
 		FB.ui(
 				{
 					method: 'share',
 					href: shareUrl,
+					display: 'popup',
 					hashtag: hashtags,
 					quote: hashtags,
 					// @ts-ignore
