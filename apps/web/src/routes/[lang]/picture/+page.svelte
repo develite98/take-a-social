@@ -1,5 +1,7 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { Page } from 'konsta/svelte';
+	import { locale, _ } from 'svelte-i18n';
 
 	const fbAppId = '888715703203677';
 	const hashtags = '#TrungNguyenEcoffee #3nenVanMinhCaPhe #TinhHoaHoiTu';
@@ -11,7 +13,8 @@
 			// Attempt to open Facebook's native app with the share dialog
 			const fbAppUrl = `fb://faceweb/f?href=https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}&quote=${encodeURIComponent(hashtags)}`;
 			// Try opening the Facebook app
-			window.location.href = fbAppUrl;
+			window.open(fbAppUrl);
+			goto(`${currentLocale}/thankyou`);
 			// Optional: Provide a fallback after a delay if the Facebook app doesn't open (depends on the device/browser behavior)
 			setTimeout(() => {
 				// Fallback to opening in a new tab if deep linking fails
@@ -37,6 +40,8 @@
 			);
 		}
 	}
+
+	$: currentLocale = $locale || 'vi';
 </script>
 
 <Page>
