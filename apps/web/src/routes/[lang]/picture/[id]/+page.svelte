@@ -56,7 +56,7 @@
 		// 	}
 		// );
 
-		const fpShareUrl = `https://m.facebook.com/dialog/share?
+		const fpShareUrl = `https://facebook.com/dialog/share?
 					app_id=${fbAppId}
 					&display=popup	
 					&href=${encodeURIComponent(shareUrl)}
