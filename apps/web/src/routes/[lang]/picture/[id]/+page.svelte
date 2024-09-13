@@ -29,7 +29,6 @@
 			FB.ui(
 				{
 					method: 'share',
-					display: 'touch',
 					href: shareUrl,
 					hashtag: hashtags,
 					quote: hashtags
