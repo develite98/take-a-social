@@ -25,16 +25,16 @@
 			<img src="/logo.png" alt="Trung Nguyên Legend" />
 		</div>
 		<h2 class="font-title text-lg text-center px-6 mt-2 text-[#42201A]">
-			{'Hội thảo nhượng quyền'} <br /> {'Trung Nguyên E-Coffee'}
+			Hội thảo nhượng quyền <br /> Trung Nguyên E-Coffee
 		</h2>
 
-		<div class="leading-5 text-center mt-2 px-4 italic">
-			“Trân trọng cảm ơn quý khách đã dành thời gian cho chúng tôi”
+		<div class="leading-5 text-center mt-2 px-4 italic text-lg">
+			Trân trọng cảm ơn quý khách đã dành thời gian cho chúng tôi
 		</div>
 
 		<div class="flex justify-center mt-6">
-			<button on:click={() => goto(`${currentLocale}/`)} class="active:bg-gray-100 active:scale-95 trasition-all font-title text-lg px-4 py-2 rounded-lg border border-dashed border-gray-300 flex items-center gap-2">
-				<img src="coffee-cup.svg" class=" w-4 h-4 inline-flex -mt-2" alt="Checkin">
+			<button on:click={() => goto(`/${currentLocale}/`)} class="active:bg-gray-100 active:scale-95 trasition-all font-title text-lg px-4 py-2 rounded-lg border border-dashed border-gray-300 flex items-center gap-2">
+				<img src="/coffee-cup.svg" class=" w-4 h-4 inline-flex -mt-2" alt="Checkin">
 				Trang chủ
 			</button>
 		</div>

@@ -1,7 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
 	import '../../app.scss';
-	import { isLoading } from 'svelte-i18n'
+	import { isLoading } from 'svelte-i18n';
+	import { client } from '$lib/storage/client';
+
+	client
+		.setEndpoint('https://master-cloud-ws4zfz9eqg.protrader.tools/v1')
+		.setProject('66e3bc690017f112ad9b');
 
 	onMount(() => {
 		// @ts-ignore
@@ -16,10 +21,22 @@
 	});
 </script>
 
-
 {#if !$isLoading}
-<div class="max-w-96">
-	<slot />
-</div>
+	<div class="max-w-96">
+		<slot />
+	</div>
 {/if}
 
+<svelte:head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P4HWTZ89NM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'G-P4HWTZ89NM');
+  </script>
+</svelte:head>

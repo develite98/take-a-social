@@ -1,10 +1,19 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Page } from 'konsta/svelte';
 	import { locale, _ } from 'svelte-i18n';
+	import { client } from '$lib/storage/client';
+	import { Storage } from 'appwrite';
+	import { page } from '$app/stores';
 
 	const fbAppId = '888715703203677';
 	const hashtags = '#TrungNguyenEcoffee #3nenVanMinhCaPhe #TinhHoaHoiTu';
+	const storage: Storage = new Storage(client);
+	const file = storage.getFilePreview('66e3be700038d5567aa5', $page.params.id) || undefined;
+
+	function goBack() {
+		goto(`/${currentLocale}`);
+	}
 
 	function openFacebookShareDialog() {
 		const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -14,7 +23,7 @@
 			const fbAppUrl = `fb://faceweb/f?href=https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}&quote=${encodeURIComponent(hashtags)}`;
 			// Try opening the Facebook app
 			window.open(fbAppUrl);
-			goto(`${currentLocale}/thankyou`);
+			goto(`/${currentLocale}/thankyou`);
 			// Optional: Provide a fallback after a delay if the Facebook app doesn't open (depends on the device/browser behavior)
 			setTimeout(() => {
 				// Fallback to opening in a new tab if deep linking fails
@@ -56,8 +65,8 @@
 
 		<div class="p-2 m-4 rounded-lg border border-dashed border-gray-300 h-[30vh]">
 			<img
-				class="rounded-lg h-full w-full"
-				src={'https://images6.alphacoders.com/134/1348908.jpeg'}
+				class="rounded-lg h-full w-full object-cover"
+				src={file?.href || 'https://images6.alphacoders.com/134/1348908.jpeg'}
 				alt=""
 			/>
 		</div>
@@ -66,13 +75,20 @@
 			{hashtags.split(' ').join(', ')}
 		</div>
 
-		<div class="flex justify-center mt-4">
+		<div class="flex justify-center mt-4 gap-2">
+			<button
+				on:click={goBack}
+				class="active:bg-gray-100 active:scale-95 trasition-all font-title text-lg px-4 py-2 rounded-lg border border-dashed border-gray-300 flex items-center gap-2"
+			>
+				<img src="/back-arrow.svg" class=" w-4 h-4 inline-flex -mt-2" alt="Checkin" />
+			</button>
+
 			<button
 				on:click={openFacebookShareDialog}
 				class="active:bg-gray-100 active:scale-95 trasition-all font-title text-lg px-4 py-2 rounded-lg border border-dashed border-gray-300 flex items-center gap-2"
 			>
 				<img src="/coffee-cup.svg" class=" w-4 h-4 inline-flex -mt-2" alt="Checkin" />
-				Chia sẻ Facebook
+				Chia sẻ Fb
 			</button>
 		</div>
 	</div>
@@ -81,16 +97,15 @@
 <svelte:head>
 	<meta property="og:title" content="Trung Nguyên Legend | Hội thảo nhượng quyền" />
 	<meta property="og:description" content="Cảm ơn quý khách" />
-	<meta property="fb:app_id" content="888715703203677" />
-	<meta property="fb:page_id" content="888715703203677" />
-	<meta property="og:image" content="https://images6.alphacoders.com/134/1348908.jpeg" />
+	<meta property="fb:app_id" content={fbAppId} />
+	<meta property="fb:page_id" content={fbAppId} />
+	<meta property="og:image" content={file.href} />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
 
-	<meta property="og:url" content="https://trungnguyenlegend.com" />
 	<meta property="og:type" content="website" />
 	<meta property="og:locale" content="en_US" />
-	<meta property="og:site_name" content="Your Website Name" />
+	<meta property="og:site_name" content="Trung Nguyên Legend | Hội thảo nhượng quyền" />
 
 	<!-- Optional: Facebook App ID -->
 	<meta property="fb:app_id" content={fbAppId} />
