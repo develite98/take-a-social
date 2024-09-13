@@ -19,15 +19,30 @@
 		const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 		const shareUrl = window.location.href;
 
-		const fpShareUrl = `https://www.facebook.com/dialog/share?
-					app_id=${fbAppId}
-					&display=page
-					&href=${encodeURIComponent(shareUrl)}
-					&quote=${encodeURIComponent(hashtags)}
-					&hashtag=${encodeURIComponent(hashtags)}
-					&redirect_uri=${encodeURIComponent(shareUrl)}`
+		// @ts-ignore
+		FB.ui(
+				{
+					method: 'share',
+					href: shareUrl,
+					hashtag: hashtags,
+					quote: hashtags,
+					// @ts-ignore
+				},
+				// @ts-ignore
+				function (response) {
+					console.log(response);
+				}
+			);
 
-		window.open(fpShareUrl, '_self');
+		// const fpShareUrl = `https://m.facebook.com/dialog/share?
+		// 			app_id=${fbAppId}
+		// 			&display=page
+		// 			&href=${encodeURIComponent(shareUrl)}
+		// 			&quote=${encodeURIComponent(hashtags)}
+		// 			&hashtag=${encodeURIComponent(hashtags)}
+		// 			&redirect_uri=${encodeURIComponent(shareUrl)}`
+
+		// window.open(fpShareUrl, '_self');
 
 		// if (isMobile) {
 		// 	// Attempt to open Facebook's native app with the share dialog
