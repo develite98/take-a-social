@@ -21,7 +21,7 @@
 </script>
 
 <Page>
-	<div class="w-full h-full main-app max-w-96 mx-auto">
+	<div class="w-full h-full main-app max-w-2xl mx-auto mx-auto">
 		<div class="flex px-4 pb-4 pt-[8vh] justify-center">
 			<img class="w-[220px]" src="/logo.png" alt="Trung Nguyên E-Coffee" />
 		</div>

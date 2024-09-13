@@ -19,25 +19,25 @@
 		const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 		const shareUrl = window.location.href;
 
-		if (isMobile) {
-			const fbAppUrl = `fb://faceweb/f?href=https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}&quote=${encodeURIComponent(hashtags)}`;
-			window.open(fbAppUrl);
-		} else {
-			// @ts-ignore
-			FB.ui(
-				{
-					method: 'share',
-					href: shareUrl,
-					hashtag: hashtags,
-					quote: hashtags
-					// @ts-ignore
-				},
+		// if (isMobile) {
+		// 	const fbAppUrl = `fb://faceweb/f?href=https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}&quote=${encodeURIComponent(hashtags)}`;
+		// 	window.open(fbAppUrl);
+		// } else {
+		// @ts-ignore
+		FB.ui(
+			{
+				method: 'share',
+				href: shareUrl,
+				hashtag: hashtags,
+				quote: hashtags
 				// @ts-ignore
-				function (response) {
-					console.log(response);
-				}
-			);
-		}
+			},
+			// @ts-ignore
+			function (response) {
+				console.log(response);
+			}
+		);
+		// }
 		// Try opening the Facebook app
 
 		// @ts-ignore
@@ -93,7 +93,7 @@
 </script>
 
 <Page>
-	<div class="w-full h-full main-app max-w-96">
+	<div class="w-full h-full main-app max-w-2xl mx-auto">
 		<div class="flex px-4 pb-4 pt-[8vh] justify-center">
 			<img class="w-[220px]" src="/logo.png" alt="Trung Nguyên E-Coffee" />
 		</div>

@@ -23,7 +23,7 @@
 </script>
 
 {#if !$isLoading}
-	<div class="max-w-96">
+	<div class="max-w-2xl mx-auto">
 		<slot />
 	</div>
 {/if}
