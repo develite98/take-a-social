@@ -24,19 +24,19 @@
 		// 	window.open(fbAppUrl);
 		// } else {
 		// @ts-ignore
-		FB.ui(
-			{
-				method: 'share',
-				href: shareUrl,
-				hashtag: hashtags,
-				quote: hashtags
-				// @ts-ignore
-			},
-			// @ts-ignore
-			function (response) {
-				console.log(response);
-			}
-		);
+		// FB.ui(
+		// 	{
+		// 		method: 'share',
+		// 		href: shareUrl,
+		// 		hashtag: hashtags,
+		// 		quote: hashtags
+		// 		// @ts-ignore
+		// 	},
+		// 	// @ts-ignore
+		// 	function (response) {
+		// 		console.log(response);
+		// 	}
+		// );
 		// }
 		// Try opening the Facebook app
 
@@ -56,15 +56,15 @@
 		// 	}
 		// );
 
-		// const fpShareUrl = `https://m.facebook.com/dialog/share?
-		// 			app_id=${fbAppId}
-		// 			&display=page
-		// 			&href=${encodeURIComponent(shareUrl)}
-		// 			&quote=${encodeURIComponent(hashtags)}
-		// 			&hashtag=${encodeURIComponent(hashtags)}
-		// 			&redirect_uri=${encodeURIComponent(shareUrl)}`
+		const fpShareUrl = `https://m.facebook.com/dialog/share?
+					app_id=${fbAppId}
+					&display=popup
+					&href=${encodeURIComponent(shareUrl)}
+					&quote=${encodeURIComponent(hashtags)}
+					&hashtag=${encodeURIComponent(hashtags)}
+					&redirect_uri=${encodeURIComponent(shareUrl)}`
 
-		// window.open(fpShareUrl, '_self');
+		window.open(fpShareUrl, '_blank', 'noopener,noreferrer');
 
 		// if (isMobile) {
 		// 	// Attempt to open Facebook's native app with the share dialog
