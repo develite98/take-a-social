@@ -66,6 +66,17 @@
 	</div>
 </Page>
 
+<svelte:head>
+	<meta property="og:title" content="Trung Nguyên Legend | Hội thảo nhượng quyền" />
+	<meta property="og:description" content="Cảm ơn quý khách" />
+
+	<meta property="og:url" content="https://trungnguyenlegend.com" />
+	<meta property="og:type" content="website" />
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:site_name" content="Your Website Name" />
+</svelte:head>
+
+
 <style>
 	.main-app {
 		background-image: url('/background.jpg');

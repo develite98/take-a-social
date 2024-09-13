@@ -74,8 +74,8 @@
 </Page>
 
 <svelte:head>
-	<meta property="og:title" content="Trung Nguyen Legend" />
-	<meta property="og:description" content="Thank you verymuch." />
+	<meta property="og:title" content="Trung Nguyên Legend | Hội thảo nhượng quyền" />
+	<meta property="og:description" content="Cảm ơn quý khách" />
 	<meta property="fb:app_id" content="888715703203677" />
 	<meta property="fb:page_id" content="888715703203677" />
 	<meta property="og:image" content="https://images6.alphacoders.com/134/1348908.jpeg" />
