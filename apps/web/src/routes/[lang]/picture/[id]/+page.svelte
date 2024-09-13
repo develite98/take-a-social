@@ -5,92 +5,42 @@
 	import { client } from '$lib/storage/client';
 	import { Storage } from 'appwrite';
 	import { page } from '$app/stores';
+	import { fade } from 'svelte/transition';
 
 	const fbAppId = '888715703203677';
 	const hashtags = '#TrungNguyenEcoffee #3nenVanMinhCaPhe #TinhHoaHoiTu';
 	const storage: Storage = new Storage(client);
 	const file = storage.getFilePreview('66e3be700038d5567aa5', $page.params.id) || undefined;
+	let isCopySuccess = false;
 
 	function goBack() {
 		goto(`/${currentLocale}`);
 	}
 
 	function openFacebookShareDialog() {
-		const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 		const shareUrl = window.location.href;
-
-		// if (isMobile) {
-		// 	const fbAppUrl = `fb://faceweb/f?href=https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}&quote=${encodeURIComponent(hashtags)}`;
-		// 	window.open(fbAppUrl);
-		// } else {
-		// @ts-ignore
-		// FB.ui(
-		// 	{
-		// 		method: 'share',
-		// 		href: shareUrl,
-		// 		hashtag: hashtags,
-		// 		quote: hashtags
-		// 		// @ts-ignore
-		// 	},
-		// 	// @ts-ignore
-		// 	function (response) {
-		// 		console.log(response);
-		// 	}
-		// );
-		// }
-		// Try opening the Facebook app
-
-		// @ts-ignore
-		// FB.ui(
-		// 	{
-		// 		method: 'share',
-		// 		href: shareUrl,
-		// 		display: 'popup',
-		// 		hashtag: hashtags,
-		// 		quote: hashtags
-		// 		// @ts-ignore
-		// 	},
-		// 	// @ts-ignore
-		// 	function (response) {
-		// 		console.log(response);
-		// 	}
-		// );
-
 		const fpShareUrl = `https://facebook.com/dialog/share?
 					app_id=${fbAppId}
 					&display=popup	
 					&href=${encodeURIComponent(shareUrl)}
 					&quote=${encodeURIComponent(hashtags)}
 					&hashtag=${encodeURIComponent(hashtags)}
-					&redirect_uri=${encodeURIComponent(shareUrl)}`
+					&redirect_uri=${encodeURIComponent(shareUrl)}`;
 
 		setTimeout(() => {
-			window.location.href = fpShareUrl
-		}, 100)
+			window.location.href = fpShareUrl;
+		}, 500);
+	}
 
-		// window.open(fpShareUrl, '_blank', 'noopener,noreferrer');
-
-		// if (isMobile) {
-		// 	// Attempt to open Facebook's native app with the share dialog
-		// 	const fbAppUrl = `fb://faceweb/f?href=https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}&quote=${encodeURIComponent(hashtags)}`;
-		// 	// Try opening the Facebook app
-		// 	window.open(fbAppUrl);
-		// } else {
-		// @ts-ignore
-		// FB.ui(
-		// 	{
-		// 		method: 'share',
-		// 		href: shareUrl,
-		// 		hashtag: hashtags,
-		// 		quote: hashtags
-		// 		// @ts-ignore
-		// 	},
-		// 	// @ts-ignore
-		// 	function (response) {
-		// 		console.log(response);
-		// 	}
-		// );
-		// }
+	function copyUrl() {
+		navigator.clipboard
+			.writeText(hashtags)
+			.then(() => {
+				isCopySuccess = true;
+			})
+			.catch((err) => {
+				isCopySuccess = false;
+			});
 	}
 
 	$: currentLocale = $locale || 'vi';
@@ -114,25 +64,42 @@
 			/>
 		</div>
 
-		<div class="flex justify-center w-3/4 text-center mx-auto leading-2" style="line-height: 1.5;">
+		<div
+			class="flex justify-center w-3/4 text-center text-[15px] mx-auto leading-2"
+			style="line-height: 1.5;"
+		>
 			{hashtags.split(' ').join(', ')}
 		</div>
 
 		<div class="flex justify-center mt-4 gap-2">
-			<button
-				on:click={goBack}
-				class="active:bg-gray-100 active:scale-95 trasition-all font-title text-lg px-4 py-2 rounded-lg border border-dashed border-gray-300 flex items-center gap-2"
-			>
-				<img src="/back-arrow.svg" class=" w-4 h-4 inline-flex -mt-2" alt="Checkin" />
-			</button>
+			{#if isCopySuccess}
+				<div class="flex flex-col gap-1 items-center">
+					<button
+						on:click={openFacebookShareDialog}
+						class="active:bg-gray-100 active:scale-95 trasition-all font-title text-lg px-4 py-2 rounded-lg border border-dashed border-gray-300 flex items-center gap-2"
+					>
+						<img src="/fb-logo.png" class=" w-4 h-4 inline-flex -mt-1" alt="Checkin" />
 
-			<button
-				on:click={openFacebookShareDialog}
-				class="active:bg-gray-100 active:scale-95 trasition-all font-title text-lg px-4 py-2 rounded-lg border border-dashed border-gray-300 flex items-center gap-2"
-			>
-				<img src="/coffee-cup.svg" class=" w-4 h-4 inline-flex -mt-2" alt="Checkin" />
-				Chia sẻ Fb
-			</button>
+						Chia sẽ đến FB
+					</button>
+					<div class="text-green-500 animate-bounce mt-2 text-[14px]" transition:fade={{ delay: 50, duration: 200 }}> ✅ Đã sao chép #hastag</div>
+				</div>
+			{:else}
+				<button
+					on:click={goBack}
+					class="active:bg-gray-100 active:scale-95 trasition-all font-title text-lg px-4 py-2 rounded-lg border border-dashed border-gray-300 flex items-center gap-2"
+				>
+					<img src="/back-arrow.svg" class=" w-4 h-4 inline-flex -mt-2" alt="Checkin" />
+				</button>
+
+				<button
+					on:click={copyUrl}
+					class="active:bg-gray-100 active:scale-95 trasition-all font-title text-lg px-4 py-2 rounded-lg border border-dashed border-gray-300 flex items-center gap-2"
+				>
+					<img src="/coffee-cup.svg" class=" w-4 h-4 inline-flex -mt-2" alt="Checkin" />
+					Chia sẻ
+				</button>
+			{/if}
 		</div>
 	</div>
 </Page>
