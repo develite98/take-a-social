@@ -25,7 +25,6 @@
 	locale.set(lang);
 
 	onMount(() => {
-		console.log(client);
 		storage = new Storage(client);
 	});
 

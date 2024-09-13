@@ -14,8 +14,9 @@
 			// @ts-ignore
 			FB.init({
 				appId: '888715703203677',
+				status: true,
 				xfbml: true,
-				version: 'v20.0'
+				version: 'v2.3'
 			});
 		};
 	});
@@ -28,15 +29,15 @@
 {/if}
 
 <svelte:head>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P4HWTZ89NM"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-P4HWTZ89NM"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
 
-    function gtag() {
-      dataLayer.push(arguments);
-    }
+		function gtag() {
+			dataLayer.push(arguments);
+		}
 
-    gtag('js', new Date());
-    gtag('config', 'G-P4HWTZ89NM');
-  </script>
+		gtag('js', new Date());
+		gtag('config', 'G-P4HWTZ89NM');
+	</script>
 </svelte:head>
