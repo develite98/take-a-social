@@ -7,7 +7,7 @@
 	import { page } from '$app/stores';
 
 	const fbAppId = '888715703203677';
-	const hashtags = '#TrungNguyenEcoffee #3nenVanMinhCaPhe #TinhHoaHoiTu';
+	const hashtags = '#TrungNguyenEcoffee#3nenVanMinhCaPhe#TinhHoaHoiTu';
 	const storage: Storage = new Storage(client);
 	const file = storage.getFilePreview('66e3be700038d5567aa5', $page.params.id) || undefined;
 
@@ -31,7 +31,8 @@
 					method: 'share',
 					display: 'touch',
 					href: shareUrl,
-					hashtag: hashtags
+					hashtag: hashtags,
+					quote: hashtags
 					// @ts-ignore
 				},
 				// @ts-ignore
