@@ -82,7 +82,7 @@
 
 						Chia sẽ đến FB
 					</button>
-					<div class="text-green-500 animate-bounce mt-2 text-[14px]" transition:fade={{ delay: 50, duration: 200 }}> ✅ Đã sao chép #hastag</div>
+					<div class="text-green-500 animate-bounce mt-2 text-[14px]" transition:fade={{ delay: 50, duration: 200 }}> ✅ Đã sao chép #hashtag</div>
 				</div>
 			{:else}
 				<button
