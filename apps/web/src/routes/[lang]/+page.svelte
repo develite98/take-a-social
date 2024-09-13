@@ -70,7 +70,7 @@
 <Page>
 	<div class="w-full h-full main-app max-w-96 mx-auto">
 		<div class="flex px-4 pb-4 pt-[8vh] justify-center">
-			<img class="w-[120px]" src="/logo.png" alt="Trung Nguyên E-Coffee" />
+			<img class="w-[220px]" src="/logo.png" alt="Trung Nguyên E-Coffee" />
 		</div>
 		<h2 class="font-title text-lg text-center px-6 mt-2 text-[#42201A]">
 			{'Hội thảo nhượng quyền'} <br /> {'Trung Nguyên E-Coffee'}
@@ -151,7 +151,7 @@
 			</SegmentedButton>
 		</Segmented>
 
-		<div class="text-center mt-4 mb-2">Developed by <a href="https://mixcore.studio/">Mixcore.Studio</a></div>
+		<div class="text-center mt-4 mb-2">Developed by <a href="https://mixcore.studio/" class="text-primary">Mixcore.Studio</a></div>
 	</div>
 </Page>
 

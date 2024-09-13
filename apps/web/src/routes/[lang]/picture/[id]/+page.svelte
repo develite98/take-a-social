@@ -7,7 +7,7 @@
 	import { page } from '$app/stores';
 
 	const fbAppId = '888715703203677';
-	const hashtags = '#TrungNguyenEcoffee#3nenVanMinhCaPhe#TinhHoaHoiTu';
+	const hashtags = '#TrungNguyenEcoffee #3nenVanMinhCaPhe #TinhHoaHoiTu';
 	const storage: Storage = new Storage(client);
 	const file = storage.getFilePreview('66e3be700038d5567aa5', $page.params.id) || undefined;
 
@@ -58,7 +58,7 @@
 <Page>
 	<div class="w-full h-full main-app max-w-96">
 		<div class="flex px-4 pb-4 pt-[8vh] justify-center">
-			<img class="w-[120px]" src="/logo.png" alt="Trung Nguyên E-Coffee" />
+			<img class="w-[220px]" src="/logo.png" alt="Trung Nguyên E-Coffee" />
 		</div>
 
 		<h2 class="font-title text-lg text-center px-6 mt-2 text-[#42201A]">
