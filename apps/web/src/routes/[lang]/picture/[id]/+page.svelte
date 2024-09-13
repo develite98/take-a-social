@@ -18,20 +18,12 @@
 	function openFacebookShareDialog() {
 		const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 		const shareUrl = window.location.href;
+
 		if (isMobile) {
 			// Attempt to open Facebook's native app with the share dialog
 			const fbAppUrl = `fb://faceweb/f?href=https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}&quote=${encodeURIComponent(hashtags)}`;
 			// Try opening the Facebook app
 			window.open(fbAppUrl);
-			goto(`/${currentLocale}/thankyou`);
-			// Optional: Provide a fallback after a delay if the Facebook app doesn't open (depends on the device/browser behavior)
-			setTimeout(() => {
-				// Fallback to opening in a new tab if deep linking fails
-				window.open(
-					`https://m.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}&hashtag=${encodeURIComponent(hashtags)}&quote=${encodeURIComponent(hashtags)}`,
-					'_blank'
-				);
-			}, 2000);
 		} else {
 			// @ts-ignore
 			FB.ui(
@@ -102,6 +94,7 @@
 	<meta property="og:image" content={file.href} />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
+	<meta property="og:url" content={$page.url.href} />
 
 	<meta property="og:type" content="website" />
 	<meta property="og:locale" content="en_US" />
