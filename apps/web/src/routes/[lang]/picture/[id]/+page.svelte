@@ -129,7 +129,7 @@ ${window.location.href}`
 
 <svelte:head>
 	<meta property="og:title" content="Trung Nguyên E-Coffee | Hội thảo nhượng quyền" />
-	<meta property="og:description" content="Cảm ơn quý khách" />
+	<meta property="og:description" content="Trải nghiệm không gian 3 nền văn minh cà phê của Trung Nguyên E-Coffee qua màn trình diễn nghệ thuật thực cảnh đặc sắc nhất và Cùng tìm hiểu về các gói nhượng quyền phù hợp với nhu cầu tài chính của quý khách." />
 	<meta property="fb:app_id" content={fbAppId} />
 	<meta property="fb:page_id" content={fbAppId} />
 	<meta property="og:image" content={file.href} />
