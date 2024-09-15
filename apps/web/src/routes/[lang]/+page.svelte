@@ -130,7 +130,7 @@
 	</div>
 
 	<div class="fixed bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center">
-		<Segmented strong rounded>
+		<!-- <Segmented strong rounded>
 			<SegmentedButton
 				strong
 				style="height: 1.75rem;"
@@ -149,9 +149,9 @@
 			>
 				<span class="whitespace-nowrap text-xs">English</span>
 			</SegmentedButton>
-		</Segmented>
+		</Segmented> -->
 
-		<div class="text-center mt-4 mb-2">Developed by <a href="https://mixcore.studio/" class="text-primary">Mixcore.Studio</a></div>
+		<div class=" mt-4 mb-2 text-[15px] leading-5 flex whitespace-nowrap">Developed by <a href="https://mixcore.studio/" class="ms-1 text-primary">Mixcore.Studio</a></div>
 	</div>
 </Page>
 

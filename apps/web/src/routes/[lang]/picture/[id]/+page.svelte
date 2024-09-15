@@ -61,9 +61,9 @@ ${window.location.href}`
 			Hội thảo nhượng quyền <br /> Trung Nguyên E-Coffee
 		</h2>
 
-		<div class="p-2 m-4 rounded-lg border border-dashed border-gray-300 h-[30vh]">
+		<div class="p-2 m-4 rounded-lg border border-dashed border-gray-300 h-[30vh] flex justify-center">
 			<img
-				class="rounded-lg h-full w-full object-cover"
+				class="rounded-lg h-full object-cover aspect-square"
 				src={file?.href || 'https://images6.alphacoders.com/134/1348908.jpeg'}
 				alt=""
 			/>
@@ -122,8 +122,8 @@ ${window.location.href}`
 		</div>
 	</div>
 
-	<div class="fixed bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center">
-		<div class="text-center mt-4 mb-2">Developed by <a href="https://mixcore.studio/" class="text-primary">Mixcore.Studio</a></div>
+	<div class="fixed bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center text-center">
+		<div class=" mt-4 mb-2 text-[15px] leading-5 flex whitespace-nowrap">Developed by <a href="https://mixcore.studio/" class="ms-1 text-primary">Mixcore.Studio</a></div>
 	</div>
 </Page>
 
