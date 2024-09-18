@@ -125,9 +125,17 @@ ${window.location.href}`
 	</div>
 
 	<div class="fixed bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-center">
-		<div class=" mt-4 mb-2 text-[15px] leading-5 flex whitespace-nowrap">Powered by</div>
+		<div class="mb-1 mt-4 text-[15px] leading-5 flex whitespace-nowrap">Powered by</div>
 
-		<symbol id="svg-logo" viewBox="0 0 523.5 107"
+		<svg
+			style="color: #fc605c;
+		fill: currentColor; transform: scale(1.1);"
+			class=""
+			xmlns="http://www.w3.org/2000/svg"
+			width="171"
+			height="40"
+			id="svg-logo"
+			viewBox="0 0 523.5 107"
 			><path
 				d="M138.2,28.9h13.3v6c2.1-2.3,4.7-4.2,7.6-5.5c2.9-1.2,5.9-1.8,9.1-1.8c3.2,0,6.3,0.8,9,2.4c2.7,1.6,4.8,3.9,6.4,7
 			c2-2.9,4.6-5.3,7.7-7c3.1-1.6,6.5-2.4,10-2.4c3.8,0,7.1,0.9,9.9,2.6c2.7,1.6,4.9,3.9,6.2,6.7c1.2,2.8,1.9,7.3,1.9,13.5V81h-13.4
@@ -162,16 +170,7 @@ ${window.location.href}`
 				d="M39.4,18.7v70.1H21.9V18.7H39.4z"
 			></path><path d="M48.8,18.6h17.4v70.2H48.8V18.6z"></path><path
 				d="M93.1,88.9H75.7V18.7h17.4V88.9z"
-			></path></symbol
-		>
-		<svg
-			style="color: #fc605c;
-    fill: currentColor; transform: scale(1.1);" 
-			class=""
-			xmlns="http://www.w3.org/2000/svg"
-			viewBox="0 0 171 40"
-			width="171"
-			height="40"><use xlink:href="#svg-logo" x="0" y="0"></use></svg
+			></path></svg
 		>
 	</div>
 </Page>
