@@ -124,7 +124,7 @@ ${window.location.href}`
 		</div> -->
 	</div>
 
-	<div class="fixed bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-center">
+	<a class="fixed bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-center" href="https://mixcore.studio/">
 		<div class="mb-1 mt-4 text-[15px] leading-5 flex whitespace-nowrap">Powered by</div>
 
 		<svg
@@ -172,7 +172,7 @@ ${window.location.href}`
 				d="M93.1,88.9H75.7V18.7h17.4V88.9z"
 			></path></svg
 		>
-	</div>
+	</a>
 </Page>
 
 <svelte:head>
