@@ -10,7 +10,7 @@
 		text-decoration: none !important;
 		outline: none !important;
 		font-family: 'Carter One', sans-serif;
-		font-size: 20px;
+		font-size: 26px;
 		line-height: 1.5em;
 		letter-spacing: 0.1em;
 		color: #fff !important;

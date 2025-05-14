@@ -108,10 +108,13 @@
 				setTimeout(() => {
 					buttonText = 'Wait result...';
 				}, 1000);
-				
-				const customers = (gameRoomSelect?.customer || []).filter(x => gameResults.findIndex(y => y.PhoneNumber === x.PhoneNumber) === -1);
+
+				const customers = (gameRoomSelect?.customer || []).filter(
+					(x) => gameResults.findIndex((y) => y.PhoneNumber === x.PhoneNumber) === -1
+				);
 				const randomCustomer =
 					customers[Math.floor(Math.random() * (gameRoomSelect?.customer?.length || 1))];
+
 				const phone = randomCustomer?.PhoneNumber || '';
 				spin(phone.slice(-5), undefined, randomCustomer);
 				clearInterval(intervalId);
@@ -213,29 +216,41 @@
 	});
 
 	$: {
-		if (gameRooms) {
+		if (gameRoomSelect) {
 			gameResults = [];
 		}
 	}
 </script>
 
 <div class="luckywheel-wrap">
-	<div class="game-room-select">
-		<Select items={gameRooms} label={'Name'} itemId={'$id'} bind:value={gameRoomSelect}></Select>
+	<div class="confetti">
+		<div class="confetti-piece"></div>
+		<div class="confetti-piece"></div>
+		<div class="confetti-piece"></div>
+		<div class="confetti-piece"></div>
+		<div class="confetti-piece"></div>
+		<div class="confetti-piece"></div>
+		<div class="confetti-piece"></div>
+		<div class="confetti-piece"></div>
+		<div class="confetti-piece"></div>
+		<div class="confetti-piece"></div>
+		<div class="confetti-piece"></div>
+		<div class="confetti-piece"></div>
+		<div class="confetti-piece"></div>
 	</div>
 	<!-- <mix-game-confetti *ngIf="isSuccess"
                        class="luckywheel-wrap__game-confetti"></mix-game-confetti> -->
 
-	<div class="luckywheel-wrap__background">
-		<!-- <img class="bg-gift-l"
-           src="assets/images/gifts.png">
-  
-      <img class="bg-gift-r"
-           src="assets/images/gifts.png"> -->
-	</div>
+	<div class="luckywheel-wrap__background"></div>
+
+	<div class="luckywheel-wrap__overlay"></div>
 
 	<div class="slot-machine result-board">
-		<h1>Game Result</h1>
+		<div class="game-room-select">
+			<Select items={gameRooms} label={'Name'} itemId={'$id'} bind:value={gameRoomSelect}></Select>
+		</div>
+
+		<h1 style="font-size: 32px;">Winners</h1>
 		<div class="item">
 			<h3>1st:</h3>
 			<div class="name">
@@ -297,7 +312,11 @@
 		</div>
 
 		<div class="container">
-			<div class="d-flex justify-content-center align-items-center" class:--disabled={playing} on:click={playGame}>
+			<div
+				class="d-flex justify-content-center align-items-center"
+				class:--disabled={playing}
+				on:click={playGame}
+			>
 				<GameButton>{buttonText}</GameButton>
 			</div>
 		</div>
@@ -334,7 +353,7 @@
 			padding: 0px !important;
 		}
 	}
-	
+
 	.--disabled {
 		pointer-events: none;
 		cursor: none;
@@ -350,7 +369,7 @@
 		&__background {
 			height: 100%;
 			width: 100%;
-			background-image: url(/assets/images/game-bg.png);
+			background-image: url(/game-background.png);
 			background-size: 100% 100%;
 			background-repeat: no-repeat;
 			position: relative;
@@ -380,8 +399,16 @@
 			}
 		}
 
+		&__overlay {
+			height: 100%;
+			width: 100%;
+			background-color: rgba(0, 0, 0, 0.5);
+			position: absolute;
+			top: 0px;
+		}
+
 		&__main-game {
-			height: 75vh;
+			height: 85vh;
 			width: 100%;
 			position: absolute;
 			top: 0px;
@@ -447,8 +474,8 @@
 	}
 
 	.slot {
-		width: 100px;
-		height: 150px;
+		width: 150px;
+		height: 190px;
 		border: 1px solid black;
 		display: inline-block;
 		overflow: hidden;
@@ -458,7 +485,7 @@
 		text-decoration: none !important;
 		outline: none !important;
 		font-family: 'Carter One', sans-serif;
-		font-size: 100px;
+		font-size: 150px;
 		text-align: center;
 		line-height: 1.5em;
 		letter-spacing: 0.1em;
@@ -537,20 +564,23 @@
 	}
 
 	.game-room-select {
-		position: absolute;
-		top: 16px;
-		left: 16px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		z-index: 2;
-		width: 320px;
+		width: 360px;
+		margin: 0 auto;
+		margin-top: -32px;
+
+		--border-radius: 99px !important;
+		--border: 2px solid hsl(var(--shadowColor) / 1);
+		--font-size: 20px;
 	}
 
 	.result-board {
 		min-width: 460px;
 		position: absolute;
-		top: 24px;
+		top: 10vh;
 		right: 50%;
 		transform: translateX(50%);
 		padding: 16px 42px 42px 42px !important;
@@ -558,6 +588,9 @@
 		flex-direction: column;
 		align-items: flex-start;
 		justify-content: flex-start;
+		border-radius: 54px;
+		overflow: unset !important;
+		z-index: 100;
 
 		h1 {
 			width: 100%;
@@ -619,6 +652,88 @@
 				0px 4px 1px #004a87,
 				2px 4px 1px #004a87,
 				-2px 4px 1px #004a87;
+		}
+	}
+
+	$yellow: #ffd300;
+	$blue: #17d3ff;
+	$pink: #ff4e91;
+
+	$duration: 1000;
+
+	@function randomNum($min, $max) {
+		$rand: random();
+		$randomNum: $min + floor($rand * (($max - $min) + 1));
+
+		@return $randomNum;
+	}
+
+	.confetti {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: absolute;
+		width: 100%;
+		height: 50vh;
+		overflow: hidden;
+		top: 20%;
+	}
+
+	.confetti-piece {
+		position: absolute;
+		width: 16px;
+		height: 24px;
+		background: $yellow;
+		top: 0;
+		opacity: 0;
+
+		@for $i from 1 through 13 {
+			&:nth-child(#{$i}) {
+				left: $i * 7%;
+				transform: rotate(#{randomNum(-80, 80)}deg);
+				animation: makeItRain $duration * 1ms infinite ease-out;
+				animation-delay: #{randomNum(0, $duration * 0.5)}ms;
+				animation-duration: #{randomNum($duration * 0.7, $duration * 1.2)}ms;
+			}
+		}
+
+		&:nth-child(odd) {
+			background: $blue;
+		}
+
+		&:nth-child(even) {
+			z-index: 1;
+		}
+
+		&:nth-child(4n) {
+			width: 8px;
+			height: 16px;
+			animation-duration: $duration * 2ms;
+		}
+
+		&:nth-child(3n) {
+			width: 5px;
+			height: 12px;
+			animation-duration: $duration * 2.5ms;
+			animation-delay: $duration * 1ms;
+		}
+
+		&:nth-child(4n-7) {
+			background: $pink;
+		}
+	}
+
+	@keyframes makeItRain {
+		from {
+			opacity: 0;
+		}
+
+		50% {
+			opacity: 1;
+		}
+
+		to {
+			transform: translateY(50vh);
 		}
 	}
 </style>
