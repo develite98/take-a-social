@@ -3,13 +3,12 @@
 	import '../../app.scss';
 	import { isLoading } from 'svelte-i18n';
 	import { client } from '$lib/storage/client';
-	import { fly } from 'svelte/transition';
 
 	let appActive = false;
 	let showFlash = true;
 
 	client
-		.setEndpoint('https://master-cloud-ws4zfz9eqg.protrader.tools/v1')
+		.setEndpoint('https://appwrite.4fx.vn/v1')
 		.setProject('66e3bc690017f112ad9b');
 
 	onMount(() => {
@@ -27,11 +26,11 @@
 
 		setTimeout(() => {
 			appActive = false;
-		}, 1500);
+		}, 500);
 
 		setTimeout(() => {
 			showFlash = false;
-		}, 2000);
+		}, 1000);
 	});
 </script>
 

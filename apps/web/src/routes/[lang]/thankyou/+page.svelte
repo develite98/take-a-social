@@ -26,7 +26,7 @@
 			<img class="w-[220px]" src="/logo.png" alt="Trung Nguyên E-Coffee" />
 		</div>
 		<h2 class="font-title text-lg text-center px-6 mt-2 text-[#42201A]">
-			Hội thảo nhượng quyền <br /> Trung Nguyên E-Coffee
+			HCMC <br /> 
 		</h2>
 
 		<div class="leading-5 text-center mt-2 px-4 italic text-lg">

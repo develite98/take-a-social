@@ -10,6 +10,10 @@
 }
 
 .font-title {
-    font-family: 'TrajanPro3';
     font-weight: bold;
+}
+
+:root {
+	--k-color-md-light-primary: 255 99 0;
+	--k-color-md-light-on-primary: 255 255 255;
 }
