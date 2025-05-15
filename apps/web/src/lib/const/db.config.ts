@@ -1,0 +1,3 @@
+export const DATABASE_ID = '681733e5001f16726eef'
+export const GAME_ID = '6817344f000b4374121d'
+export const CUSTOMER_ID = '68173407002237cbba6a'

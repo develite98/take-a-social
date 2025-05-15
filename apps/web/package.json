@@ -17,6 +17,7 @@
 	"dependencies": {
 		"@repo/ui": "workspace:*",
 		"@sveltejs/adapter-vercel": "^5.4.3",
+		"@tailwindcss/vite": "^4.1.6",
 		"appwrite": "^15.0.0",
 		"framework7-icons": "^5.0.5",
 		"konsta": "^4.0.0",
