@@ -578,7 +578,7 @@
 	}
 
 	.result-board {
-		min-width: 460px;
+		min-width: 520px;
 		position: absolute;
 		top: 10vh;
 		right: 50%;
