@@ -11,9 +11,9 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { client } from '$lib/storage/client';
-	import { locale, t } from '$lib/translations';
+	import { locale } from '$lib/translations';
 	import { Databases, ID, Query, Storage } from 'appwrite';
-	import { Button, List, ListInput, Page } from 'konsta/svelte';
+	import { Page } from 'konsta/svelte';
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 
@@ -29,6 +29,7 @@
 	let email = '';
 	let userInfo = writable<any | null>(null);
 	let showInputName = false;
+	let loading = false;
 
 	const databaseId = '681733e5001f16726eef'; // Your database ID
 	const collectionId = '68173407002237cbba6a'; // Your collection ID
@@ -86,45 +87,56 @@
 		}
 
 		try {
+			loading = true;
 			const user = await database.createDocument(databaseId, collectionId, ID.unique(), {
 				PhoneNumber: phone,
 				Name: name,
 				Email: email,
+				IsCheckedIn: true
 			});
 
+			showInputName = false;
 			userInfo.set(user);
 		} catch (error) {
 			console.error('Error checking/inserting document:', error);
 			alert('Đã có lỗi xảy ra. Vui lòng thử lại.');
 		}
+
+		loading = false;
 	}
 
 	async function handleConfirm() {
-		if (!phone) {
-			alert('Vui lòng nhập số điện thoại');
+		if (!email) {
+			alert('Vui lòng nhập email của quý khách');
 			return;
 		}
 
 		try {
+			loading = true;
 			const result = await database.listDocuments(databaseId, collectionId, [
-				Query.equal('PhoneNumber', phone)
+				Query.equal('Email', email)
 			]);
 
 			if (result.documents.length > 0) {
-				userInfo.set(result.documents[0]);
+				const user = result.documents[0];
+				await database.updateDocument(databaseId, collectionId, user.$id, { IsCheckedIn: true });
+				userInfo.set(user);
 			} else {
+				userInfo.set({ Email: email });
 				showInputName = true;
 			}
 		} catch (error) {
 			console.error('Error checking/inserting document:', error);
 			alert('Đã có lỗi xảy ra. Vui lòng thử lại.');
 		}
+
+		loading = false;
 	}
 </script>
 
-<Page>
+<Page style="background: rgb(5 5 60)">
 	<div class="w-full h-full main-app max-w-2xl mx-auto mx-auto">
-		<div class="flex px-4 pb-4 pt-[8vh] justify-center">
+		<!-- <div class="flex px-4 pb-4 pt-[8vh] justify-center">
 			<img class="w-[80px]" src="/logo.png" alt="Trung Nguyên E-Coffee" />
 		</div>
 		<h2 class="font-title text-2xl text-center px-6 mt-2">
@@ -138,106 +150,158 @@
 			class="leading-5 text-center mt-4 px-4 rounded-full border border-base-content/10 w-fit py-2 mx-auto"
 		>
 			Hành trình nhất quán trong giao dịch
+		</div> -->
+		<div class="mb-8 pt-12 flex w-full justify-center">
+			<img class="w-[88%] h-auto" alt="4Fx" src="header.svg" />
 		</div>
-		{#if !$userInfo}
-			{#if showInputName}
+		<div class="p-4 px-16">
+			{#if !$userInfo}
+				<div class="w-full max-w-sm min-w-[200px]">
+					<input
+						bind:value={email}
+						class="w-full bg-transparent placeholder:text-slate-200 text-slate-200 text-sm border border-slate-200 rounded-md px-4 py-3 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+						placeholder="Nhập email..."
+					/>
+				</div>
 
-				<List strongIos insetIos>
-					<div class="mb-4 mx-4 text-center">
-						Hoàn thành thêm 1 bước để nhận nhiều phần quá hấp dẫn
-					</div>
-
-					<ListInput
-						value={name}
-						onChange={(e) => (name = e.target.value)}
-						outline
-						label="Họ và tên"
-						type="text"
-						placeholder="Nhập họ và tên của quý khách"
-					></ListInput>
-
-					<ListInput
-						value={email}
-						onChange={(e) => (email = e.target.value)}
-						outline
-						label="Email"
-						type="text"
-						placeholder="Nhập email của quý khách"
-					></ListInput>
-
-
-					<div class="flex justify-center w-[160px] m-auto">
-						<Button onClick={() => handleInsertInfo()} class="text-base" large rounded
-							>Xác nhận</Button
-						>
-					</div>
-				</List>
+				<div class="flex items-center justify-center mt-4 w-full">
+					<button
+						on:click={handleConfirm}
+						type="button"
+						class:disabled={loading}
+						class="py-3 bg-[#00CCFF] flex gap-2 items-center px-12 me-2 mb-2 text-base font-medium text-gray-900 rounded-lg"
+					>
+						{#if loading}
+							<svg
+								aria-hidden="true"
+								role="status"
+								class="inline w-4 h-4 text-gray-200 animate-spin dark:text-gray-600"
+								viewBox="0 0 100 101"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+									fill="currentColor"
+								/>
+								<path
+									d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+									fill="#1C64F2"
+								/>
+							</svg>
+						{/if}
+						Xác nhận
+					</button>
+				</div>
 			{:else}
-				<List strongIos insetIos>
-					<ListInput
-						value={phone}
-						onChange={(e) => (phone = e.target.value)}
-						outline
-						label="Số điện thoại"
-						type="text"
-						placeholder="Nhập số điện thoại của quý khách"
-					></ListInput>
+				<input
+					type="file"
+					id="uploader"
+					accept="image/*"
+					bind:this={fileInput}
+					on:change={handleFileChange}
+					style="display: none;"
+				/>
 
-					<div class="flex justify-center w-[160px] m-auto">
-						<Button onClick={handleConfirm} class="text-base" large rounded>Xác nhận</Button>
+				{#if showInputName}
+					<div class="text-center mt-4 text-lg text-white text-sm mb-4">
+						Thêm 1 bước để nhận thưởng
 					</div>
-				</List>
-			{/if}
-		{:else}
-			<input
-				type="file"
-				id="uploader"
-				accept="image/*"
-				bind:this={fileInput}
-				on:change={handleFileChange}
-				style="display: none;"
-			/>
+					<div class="w-full max-w-sm min-w-[200px] mb-2">
+						<input
+							bind:value={name}
+							class="w-full bg-transparent placeholder:text-slate-200 text-slate-200 text-sm border border-slate-200 rounded-md px-4 py-3 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+							placeholder="Nhập họ và tên..."
+						/>
+					</div>
 
-			<div class="text-center mt-6 text-base">Xin chào, {$userInfo?.Name}</div>
+					<div class="w-full max-w-sm min-w-[200px] mb-2">
+						<input
+							bind:value={phone}
+							class="w-full bg-transparent placeholder:text-slate-200 text-slate-200 text-sm border border-slate-200 rounded-md px-4 py-3 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+							placeholder="Nhập số điện thoại..."
+						/>
+					</div>
 
-			<div class="flex justify-center mt-4">
-				<button
-					class:opacity-60={uploading}
-					class:pointer-events-none={uploading}
-					on:click={() => triggerFileInput()}
-					class="bg-white active:bg-gray-100 active:scale-95 trasition-all font-title text-sm px-4 py-6 pt-5 rounded-lg border border-dashed border-gray-300 flex flex-col justify-center items-center gap-2"
-				>
-					{#if uploading}
-						<svg
-							aria-hidden="true"
-							role="status"
-							class="inline w-4 h-4 text-gray-200 animate-spin dark:text-gray-600"
-							viewBox="0 0 100 101"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
+					<div class="flex items-center justify-center mt-4 w-full">
+						<button
+							on:click={handleInsertInfo}
+							type="button"
+							class:disabled={loading}
+							class="py-3 bg-[#00CCFF] flex items-center gap-2 px-12 me-2 mb-2 text-base font-medium text-gray-900 rounded-lg"
 						>
-							<path
-								d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-								fill="currentColor"
-							/>
-							<path
-								d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-								fill="#1C64F2"
-							/>
-						</svg>
-					{/if}
-					<div>
-						Chọn ảnh đẹp của bạn <br /> tại đây
+							{#if loading}
+								<div class="text-left rtl:text-right">
+									<div role="status">
+										<svg
+											aria-hidden="true"
+											class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+											viewBox="0 0 100 101"
+											fill="none"
+											xmlns="http://www.w3.org/2000/svg"
+										>
+											<path
+												d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+												fill="currentColor"
+											/>
+											<path
+												d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+												fill="currentFill"
+											/>
+										</svg>
+										<span class="sr-only">Loading...</span>
+									</div>
+								</div>
+							{/if}
+							Xác nhận
+						</button>
 					</div>
-				</button>
-			</div>
-		{/if}
+				{:else}
+					<div class="text-center mt-4 text-lg text-white">
+						Xin chào, <br />
+						<span class="text-2xl">
+							{$userInfo?.Name || 'Guest'}
+						</span>
+					</div>
+
+					<div class="flex justify-center mt-6">
+						<button
+							class:opacity-60={uploading}
+							class:pointer-events-none={uploading}
+							on:click={() => triggerFileInput()}
+							class="text-white active:scale-95 trasition-all font-title text-sm px-4 py-6 pt-5 rounded-lg border border-dashed border-gray-300 flex flex-col justify-center items-center gap-2"
+						>
+							{#if uploading}
+								<svg
+									aria-hidden="true"
+									role="status"
+									class="inline w-4 h-4 text-gray-200 animate-spin dark:text-gray-600"
+									viewBox="0 0 100 101"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+										fill="currentColor"
+									/>
+									<path
+										d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+										fill="#1C64F2"
+									/>
+								</svg>
+							{/if}
+							<div>
+								Chọn ảnh đẹp của bạn <br /> tại đây
+							</div>
+						</button>
+					</div>
+				{/if}
+			{/if}
+		</div>
 	</div>
 
-	<div class="fixed bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center">
-		<div class=" mt-4 mb-2 text-[12px] leading-5 flex text-center">
-			#MarketBalance, #4FxTeam, #TradingCoffee
-		</div>
+	<div class="fixed bottom-12 left-1/2 -translate-x-1/2 w-full flex flex-col items-center">
+		<img class="w-[60%] max-w-[300px h-auto" alt="4Fx" src="footer.svg" />
 	</div>
 </Page>
 
@@ -253,8 +317,13 @@
 
 <style>
 	.main-app {
-		background-image: url('/background.jpg');
+		background-image: url('/bg.png');
 		background-size: cover;
 		background-repeat: no-repeat;
+	}
+
+	.disabled {
+		opacity: 0.6;
+		pointer-events: none;
 	}
 </style>

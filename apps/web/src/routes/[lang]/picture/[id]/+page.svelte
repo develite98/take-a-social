@@ -53,22 +53,15 @@ ${window.location.href}`
 	$: currentLocale = $locale || 'vi';
 </script>
 
-<Page>
+<Page style="background: rgb(5 5 60)">
 	<div class="w-full h-full main-app max-w-2xl mx-auto">
-		<div class="flex px-4 pb-4 pt-[8vh] justify-center">
-			<img class="w-[60px]" src="/logo.png" alt="Trung Nguyên E-Coffee" />
+		<div class="mb-8 pt-12 flex w-full justify-center">
+			<img class="w-[80%] h-auto" alt="4Fx" src="/header.svg" />
 		</div>
-
-		<h2 class="font-title text-2xl text-center px-6 mt-2 mb-4">
-			<div class="text-6xl">
-				{$t('common.title')}
-			</div>
-			VOLUME TRADING
-		</h2>
 
 
 		<div
-			class="p-2 m-4 bg-white rounded-lg border border-dashed border-gray-300 h-[30vh] flex justify-center"
+			class="p-2 m-4  rounded-lg border border-dashed border-gray-300 h-[30vh] flex justify-center"
 		>
 			<img
 				class="rounded-lg h-full object-cover aspect-square"
@@ -78,7 +71,7 @@ ${window.location.href}`
 		</div>
 
 		<div
-			class="justify-center w-3/4 text-center text-[14px] mx-auto leading-2 mt-8"
+			class="justify-center w-3/4 text-center text-white text-[14px] mx-auto leading-2 mt-8"
 			style="line-height: 1.5;"
 		>
 			{#each hashtags.split(' ') as tag}
@@ -157,7 +150,7 @@ ${window.location.href}`
 
 <style>
 	.main-app {
-		background-image: url('/background.jpg');
+		background-image: url('/bg.png');
 		background-size: cover;
 		background-repeat: no-repeat;
 	}
