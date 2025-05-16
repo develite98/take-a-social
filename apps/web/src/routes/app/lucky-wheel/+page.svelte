@@ -128,7 +128,7 @@
 			playing = false;
 			buttonText = 'Start game';
 			isSuccess = true;
-		}, 5000);
+		}, 3000);
 	}
 
 	function spin(code?: string, duration?: number, customer?: any) {
@@ -215,6 +215,10 @@
 		});
 	});
 
+	const deleteGameResult = (phone: string) => {
+		gameResults = gameResults.filter(x => x.PhoneNumber !== phone)
+	}
+
 	$: {
 		if (gameRoomSelect) {
 			gameResults = [];
@@ -251,37 +255,59 @@
 		</div>
 
 		<h1 style="font-size: 32px;">Winners</h1>
-		<div class="item">
-			<h3>1st:</h3>
-			<div class="name">
-				{#if gameResults[0]?.PhoneNumber}
-					{gameResults[0]?.Name} - {gameResults[0]?.PhoneNumber.slice(-5)}
-				{:else}
-					...
-				{/if}
+		<div class="w-full max-h-[300px] overflow-auto">
+			<div class="item">
+				<h3>1st:</h3>
+				<div class="name flex items-center gap-2">
+					{#if gameResults[0]?.PhoneNumber}
+						{gameResults[0]?.Name} - {gameResults[0]?.PhoneNumber.slice(-5)}
+						<span on:click={() => deleteGameResult(gameResults[0]?.PhoneNumber)}><img width="32" src="/icon-close.svg" alt="" /></span>
+					{:else}
+						...
+					{/if}
+				</div>
+			</div>
+			<div class="item">
+				<h3>2nd:</h3>
+				<div class="name flex items-center gap-2">
+					{#if gameResults[1]?.PhoneNumber}
+						{gameResults[1]?.Name} - {gameResults[1]?.PhoneNumber.slice(-5)}
+						<span on:click={() => deleteGameResult(gameResults[1]?.PhoneNumber)}><img width="32" src="/icon-close.svg" alt="" /></span>
+						
+					{:else}
+						...
+					{/if}
+				</div>
+			</div>
+			<div class="item">
+				<h3>3rd:</h3>
+	
+				<div class="name flex items-center gap-2">
+					{#if gameResults[2]?.PhoneNumber}
+						{gameResults[2]?.Name} - {gameResults[2]?.PhoneNumber.slice(-5)}
+						<span on:click={() => deleteGameResult(gameResults[2]?.PhoneNumber)}><img width="32" src="/icon-close.svg" alt="" /></span>
+					{:else}
+						...
+					{/if}
+				</div>
 			</div>
 		</div>
-		<div class="item">
-			<h3>2nd:</h3>
-			<div class="name">
-				{#if gameResults[1]?.PhoneNumber}
-					{gameResults[1]?.Name} - {gameResults[1]?.PhoneNumber.slice(-5)}
-				{:else}
-					...
-				{/if}
-			</div>
-		</div>
-		<div class="item">
-			<h3>3rd:</h3>
+		
 
-			<div class="name">
-				{#if gameResults[2]?.PhoneNumber}
-					{gameResults[2]?.Name} - {gameResults[2]?.PhoneNumber.slice(-5)}
-				{:else}
-					...
-				{/if}
+		<!-- From 4th to 10th if they exist -->
+		{#each gameResults.slice(3, 10) as result, i}
+			<div class="item">
+				<h3>{i + 4}th:</h3>
+				<div class="name flex items-center gap-2">
+					{#if result?.PhoneNumber}
+						{result.Name} - {result.PhoneNumber.slice(-5)}
+						<span on:click={() => deleteGameResult(result.PhoneNumber)}><img width="32" src="/icon-close.svg" alt="" /></span>
+					{:else}
+						...
+					{/if}
+				</div>
 			</div>
-		</div>
+		{/each}
 	</div>
 
 	<div class="luckywheel-wrap__main-game" class:d-none={isSuccess}>
@@ -312,11 +338,7 @@
 		</div>
 
 		<div class="container">
-			<div
-				class="d-flex justify-content-center align-items-center"
-				class:--disabled={playing}
-				on:click={playGame}
-			>
+			<div class="flex justify-center items-center" class:--disabled={playing} on:click={playGame}>
 				<GameButton>{buttonText}</GameButton>
 			</div>
 		</div>
@@ -578,7 +600,7 @@
 	}
 
 	.result-board {
-		min-width: 520px;
+		min-width: 620px;
 		position: absolute;
 		top: 10vh;
 		right: 50%;
