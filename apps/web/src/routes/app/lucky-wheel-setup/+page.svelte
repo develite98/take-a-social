@@ -9,7 +9,7 @@
 		Name: string;
 		PhoneNumber: string;
 		Type: string;
-        IsCheckedIn: boolean;
+		IsCheckedIn: boolean;
 	};
 
 	type GameRoom = {
@@ -80,20 +80,20 @@
 		}
 	}
 
-    function filter(data: User[], searchText: string, type: string[], isChecked: boolean) {
-        let result = data;
-        result = result.filter((x) => x.Name.includes(searchText || ''));
+	function filter(data: User[], searchText: string, type: string[], isChecked: boolean) {
+		let result = data;
+		result = result.filter((x) => x.Name.includes(searchText || ''));
 
-        if (type?.length) {
-            result = result.filter(x => type.includes(x.Type));
-        }
+		if (type?.length) {
+			result = result.filter((x) => type.includes(x.Type));
+		}
 
-        if (isChecked) {
-            result = result.filter(x => x.IsCheckedIn);
-        }
+		if (isChecked) {
+			result = result.filter((x) => x.IsCheckedIn);
+		}
 
-        return result;
-    }
+		return result;
+	}
 
 	onMount(() => {
 		client.setEndpoint('https://appwrite.4fx.vn/v1').setProject('66e3bc690017f112ad9b');
@@ -141,7 +141,36 @@
 							class="flex items-center justify-between p-3 border border-gray-200 rounded-md shadow-sm hover:shadow-md transition-shadow bg-gray-50"
 						>
 							<div class="text-gray-800 font-medium">
-								<div class="text-lg">{user.Name}</div>
+								<div class="text-lg flex items-center gap-2">
+									{user.Name}
+									{#if user.IsCheckedIn}
+										<span
+											class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-green-600/20 ring-inset"
+											>Check in
+										</span>
+									{/if}
+
+									{#if user.Type === 'Guest'}
+										<span
+											class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset"
+											>Guest
+										</span>
+									{/if}
+
+									{#if user.Type === 'Trial'}
+										<span
+											class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-green-600/20 ring-inset"
+											>Trial
+										</span>
+									{/if}
+
+									{#if user.Type === 'Premier'}
+										<span
+											class="inline-flex items-center rounded-md bg-pink-50 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-pink-700/10 ring-inset"
+											>Premier
+										</span>
+									{/if}
+								</div>
 								<div class="text-sm text-gray-500">{user.PhoneNumber}</div>
 							</div>
 
@@ -230,24 +259,52 @@
 
 				<ul class="space-y-4 max-h-[60vh] overflow-auto">
 					{#each displayRightUsers as user}
-                        {#if !(leftUsers.some((x) => x.$id === user.$id))}
-                        <li
-							class="flex items-center justify-between p-3 border border-gray-200 rounded-md shadow-sm hover:shadow-md transition-shadow bg-gray-50"
-						>
-							<button
-								on:click={() => addUserToRoom(user)}
-								class="px-3 py-1 rounded bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+						{#if !leftUsers.some((x) => x.$id === user.$id)}
+							<li
+								class="flex items-center justify-between p-3 border border-gray-200 rounded-md shadow-sm hover:shadow-md transition-shadow bg-gray-50"
 							>
-								Add
-							</button>
+								<button
+									on:click={() => addUserToRoom(user)}
+									class="px-3 py-1 rounded bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+								>
+									Add
+								</button>
 
-							<div class="text-gray-800 font-medium text-end">
-								<div class="text-lg">{user.Name}</div>
-								<div class="text-sm text-gray-500">{user.PhoneNumber}</div>
-							</div>
-						</li>
-                        {/if}
-						
+								<div class="text-gray-800 font-medium text-end">
+									<div class="text-lg flex items-center gap-2">
+										{user.Name}
+										{#if user.IsCheckedIn}
+											<span
+												class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-green-600/20 ring-inset"
+												>Check in
+											</span>
+										{/if}
+
+										{#if user.Type === 'Guest'}
+											<span
+												class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset"
+												>Guest
+											</span>
+										{/if}
+
+										{#if user.Type === 'Trial'}
+											<span
+												class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-green-600/20 ring-inset"
+												>Trial
+											</span>
+										{/if}
+
+										{#if user.Type === 'Premier'}
+											<span
+												class="inline-flex items-center rounded-md bg-pink-50 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-pink-700/10 ring-inset"
+												>Premier
+											</span>
+										{/if}
+									</div>
+									<div class="text-sm text-gray-500">{user.PhoneNumber}</div>
+								</div>
+							</li>
+						{/if}
 					{/each}
 				</ul>
 			</div>
