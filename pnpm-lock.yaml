@@ -103,6 +103,9 @@ importers:
       svelte-i18n:
         specifier: ^4.0.0
         version: 4.0.1(svelte@4.2.19)
+      svelte-persisted-store:
+        specifier: ^0.12.0
+        version: 0.12.0(svelte@4.2.19)
       svelte-select:
         specifier: ^5.8.3
         version: 5.8.3
@@ -3844,6 +3847,15 @@ packages:
       sade: 1.8.1
       svelte: 4.2.19
       tiny-glob: 0.2.9
+    dev: false
+
+  /svelte-persisted-store@0.12.0(svelte@4.2.19):
+    resolution: {integrity: sha512-BdBQr2SGSJ+rDWH8/aEV5GthBJDapVP0GP3fuUCA7TjYG5ctcB+O9Mj9ZC0+Jo1oJMfZUd1y9H68NFRR5MyIJA==}
+    engines: {node: '>=0.14'}
+    peerDependencies:
+      svelte: ^3.48.0 || ^4 || ^5
+    dependencies:
+      svelte: 4.2.19
     dev: false
 
   /svelte-preprocess@5.1.4(postcss@8.5.3)(sass@1.87.0)(svelte@4.2.19)(typescript@5.8.3):

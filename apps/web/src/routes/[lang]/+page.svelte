@@ -10,25 +10,26 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { CUSTOMER_ID, DATABASE_ID } from '$lib';
 	import { client } from '$lib/storage/client';
 	import { locale } from '$lib/translations';
-	import { Databases, ID, Query, Storage } from 'appwrite';
+	import { Databases, ID, Query, Storage, Functions } from 'appwrite';
 	import { Page } from 'konsta/svelte';
 	import { onMount } from 'svelte';
-	import { writable } from 'svelte/store';
+	import { persisted } from 'svelte-persisted-store';
 
 	export let lang;
 
 	let storage!: Storage;
 	let database!: Databases;
+	let functions!: Functions;
 	let file: File | undefined;
 	let fileInput: HTMLInputElement | undefined;
 	let uploading = false;
 	let phone = '';
 	let name = '';
 	let email = '';
-	let userInfo = writable<any | null>(null);
-	let showInputName = false;
+	let userInfo = persisted<any | null>('userData', null);
 	let loading = false;
 
 	const databaseId = '681733e5001f16726eef'; // Your database ID
@@ -37,10 +38,11 @@
 	locale.set(lang);
 
 	onMount(() => {
-		storage = new Storage(client);
 		client.setEndpoint('https://appwrite.4fx.vn/v1').setProject('66e3bc690017f112ad9b');
 
+		storage = new Storage(client);
 		database = new Databases(client);
+		functions = new Functions(client);
 	});
 
 	const upload = async () => {
@@ -53,6 +55,11 @@
 			uploading = true;
 			const promise = storage.createFile('66e3be700038d5567aa5', ID.unique(), file);
 			const response = await promise;
+			const user = await database.updateDocument(DATABASE_ID, CUSTOMER_ID, $userInfo.$id, {
+				CheckInImagePath: [response.$id]
+			});
+
+			userInfo.set(user);
 			goto(`${currentLocale}/picture/${response.$id}`);
 		} catch (error) {
 			//
@@ -63,9 +70,14 @@
 	};
 
 	$: currentLocale = $locale || 'vi';
+	$: currentImages = ($userInfo?.CheckInImagePath as string[]) || [];
 
 	function triggerFileInput() {
-		fileInput?.click();
+		if (currentImages?.length) {
+			goto('/vi/picture/' + currentImages[0]);
+		} else {
+			fileInput?.click();
+		}
 	}
 
 	function handleFileChange(event: any) {
@@ -95,7 +107,6 @@
 				IsCheckedIn: true
 			});
 
-			showInputName = false;
 			userInfo.set(user);
 		} catch (error) {
 			console.error('Error checking/inserting document:', error);
@@ -117,13 +128,27 @@
 				Query.equal('Email', email)
 			]);
 
+			let user;
 			if (result.documents.length > 0) {
-				const user = result.documents[0];
+				user = result.documents[0];
 				await database.updateDocument(databaseId, collectionId, user.$id, { IsCheckedIn: true });
-				userInfo.set(user);
 			} else {
-				userInfo.set({ Email: email });
-				showInputName = true;
+				user = await database.createDocument(databaseId, collectionId, ID.unique(), {
+					IsCheckedIn: true,
+					Email: email
+				});
+			}
+
+			userInfo.set(user);
+			if (user) {
+				// const promise = functions.createExecution(
+				// 	'check-customer-email', // functionId
+				// 	'<BODY>', // body (optional)
+				// 	false, // async (optional)
+				// 	'<PATH>', // path (optional)
+				// 	'GET', // method (optional)
+				// 	{} // headers (optional)
+				// );
 			}
 		} catch (error) {
 			console.error('Error checking/inserting document:', error);
@@ -156,7 +181,7 @@
 		</div>
 		<div class="p-4 px-16">
 			{#if !$userInfo}
-				<div class="w-full max-w-sm min-w-[200px]">
+				<div class="w-full max-w-sm mx-auto min-w-[200px]">
 					<input
 						bind:value={email}
 						class="w-full bg-transparent placeholder:text-slate-200 text-slate-200 text-sm border border-slate-200 rounded-md px-4 py-3 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
@@ -203,10 +228,16 @@
 					style="display: none;"
 				/>
 
-				{#if showInputName}
-					<div class="text-center mt-4 text-lg text-white text-sm mb-4">
-						Thêm 1 bước để nhận thưởng
+				{#if !$userInfo.Name}
+					<div class="text-center text-lg text-white">
+						Xin chào, <br />
+						<span class="text-2xl">
+							{$userInfo?.Email.split('@')[0] || 'Guest'}
+						</span> <br />
+
+						<a class="text-xs text-blue-500" on:click={() => userInfo.set(null)}>Đổi email</a>
 					</div>
+					<div class="text-center mt-2 text-white text-sm mb-4">Thêm 1 bước để nhận thưởng</div>
 					<div class="w-full max-w-sm min-w-[200px] mb-2">
 						<input
 							bind:value={name}
@@ -257,14 +288,16 @@
 						</button>
 					</div>
 				{:else}
-					<div class="text-center mt-4 text-lg text-white">
+					<div class="text-center text-lg text-white">
 						Xin chào, <br />
 						<span class="text-2xl">
 							{$userInfo?.Name || 'Guest'}
-						</span>
+						</span> <br />
+
+						<a class="text-xs text-blue-500" on:click={() => userInfo.set(null)}>Đổi tài khoản</a>
 					</div>
 
-					<div class="flex justify-center mt-6">
+					<div class="flex flex-col gap-4 justify-center mt-6">
 						<button
 							class:opacity-60={uploading}
 							class:pointer-events-none={uploading}
@@ -290,9 +323,23 @@
 									/>
 								</svg>
 							{/if}
-							<div>
-								Chọn ảnh đẹp của bạn <br /> tại đây
-							</div>
+
+							{#if currentImages?.length}
+								<div>Xem lại hình ảnh</div>
+							{:else}
+								<div>
+									Chia sẽ hình ảnh <br /> Check-in sự kiện
+								</div>
+							{/if}
+						</button>
+
+						<button
+							class:opacity-60={uploading}
+							class:pointer-events-none={uploading}
+							on:click={() => goto('/vi/register')}
+							class="text-white active:scale-95 trasition-all font-title text-sm px-4 py-6 pt-5 rounded-lg border border-dashed border-gray-300 flex flex-col justify-center items-center gap-2"
+						>
+							<div>Đăng ký dự tiệc offline</div>
 						</button>
 					</div>
 				{/if}
@@ -301,7 +348,7 @@
 	</div>
 
 	<div class="fixed bottom-12 left-1/2 -translate-x-1/2 w-full flex flex-col items-center">
-		<img class="w-[60%] max-w-[300px h-auto" alt="4Fx" src="footer.svg" />
+		<img class="w-[60%] max-w-[300px] h-auto" alt="4Fx" src="footer-text.svg" />
 	</div>
 </Page>
 
