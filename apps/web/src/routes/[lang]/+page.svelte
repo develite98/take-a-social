@@ -160,7 +160,7 @@
 </script>
 
 <Page style="background: rgb(5 5 60)">
-	<div class="w-full h-full main-app max-w-2xl mx-auto mx-auto">
+	<div class="w-full h-full min-h-[100dvh] flex flex-col main-app max-w-2xl mx-auto mx-auto pb-44 overflow-auto">
 		<!-- <div class="flex px-4 pb-4 pt-[8vh] justify-center">
 			<img class="w-[80px]" src="/logo.png" alt="Trung Nguyên E-Coffee" />
 		</div>
@@ -176,7 +176,7 @@
 		>
 			Hành trình nhất quán trong giao dịch
 		</div> -->
-		<div class="mb-8 pt-12 flex w-full justify-center">
+		<div class="mb-4 pt-12 flex w-full justify-center">
 			<img class="w-[88%] h-auto" alt="4Fx" src="header.svg" />
 		</div>
 		<div class="p-4 px-16">
@@ -325,10 +325,10 @@
 							{/if}
 
 							{#if currentImages?.length}
-								<div>Xem lại hình ảnh</div>
+								<div>📷 Xem lại hình ảnh</div>
 							{:else}
 								<div>
-									Chia sẽ hình ảnh <br /> Check-in sự kiện
+									📷 Chia sẽ hình ảnh <br /> Check-in sự kiện
 								</div>
 							{/if}
 						</button>
@@ -339,17 +339,19 @@
 							on:click={() => goto('/vi/register')}
 							class="text-white active:scale-95 trasition-all font-title text-sm px-4 py-6 pt-5 rounded-lg border border-dashed border-gray-300 flex flex-col justify-center items-center gap-2"
 						>
-							<div>Đăng ký dự tiệc offline</div>
+							<div>🎉 Đăng ký Buổi Tiệc Offline 4FX <br> Kết Nối Nhà Giao Dịch!</div>
 						</button>
 					</div>
 				{/if}
 			{/if}
 		</div>
+
+		<div class="mt-12 w-full flex flex-col items-center">
+			<img class="w-[60%] max-w-[300px] h-auto" alt="4Fx" src="footer-text.svg" />
+		</div>
 	</div>
 
-	<div class="fixed bottom-12 left-1/2 -translate-x-1/2 w-full flex flex-col items-center">
-		<img class="w-[60%] max-w-[300px] h-auto" alt="4Fx" src="footer-text.svg" />
-	</div>
+
 </Page>
 
 <svelte:head>

@@ -9,16 +9,13 @@
 		BlockTitle,
 		Block,
 		Button,
-		NavbarBackLink,
-		List,
-		ListItem
+		NavbarBackLink
 	} from 'konsta/svelte';
 	import { onMount } from 'svelte';
 	import { persisted } from 'svelte-persisted-store';
 
 	let userInfo = persisted<any | null>('userData', null);
 
-	let isTop = false;
 	let storage!: Storage;
 	let database!: Databases;
 
@@ -77,7 +74,7 @@
 
 <Page>
 	<div class="w-full h-full main-app max-w-2xl mx-auto mx-auto pb-24 overflow-auto">
-		<Navbar title="Đăng ký tiệc Offline">
+		<Navbar title="🎉 Đăng ký dự tiệc">
 			<NavbarBackLink slot="left" text="Back" onClick={() => history.back()} />
 		</Navbar>
 

@@ -3,7 +3,17 @@
 	import { client } from '$lib/storage/client';
 	import { Databases } from 'appwrite';
 	import { onMount } from 'svelte';
+	import { persisted } from 'svelte-persisted-store';
 	import Select from 'svelte-select';
+	import { get } from 'svelte/store';
+
+	type User = {
+		$id: string;
+		Name: string;
+		PhoneNumber: string;
+		WillWin: boolean;
+		AlreadyWin: boolean;
+	};
 
 	const slotSymbols = [
 		[
@@ -76,19 +86,46 @@
 	let playing = false;
 	let buttonText = 'Start game';
 	let intervalId: number;
-	let gameRooms: { Name: string; $id: string; customer: { Name: string; PhoneNumber: string }[] }[];
+
+	let gameRooms: { Name: string; $id: string; customer: User[] }[];
 	let gameRoomSelect: {
 		Name: string;
 		$id: string;
-		customer: { Name: string; PhoneNumber: string }[];
+		customer: User[];
 	} | null;
-	let gameResults: { Name: string; PhoneNumber: string }[] = [];
+
+	let gameResultByRoom = persisted<Record<string, User[]> | undefined>('game-result', {});
+	let willWinById: Record<string, boolean> = {};
 
 	function createSymbolElement(symbol: string) {
 		const div = document.createElement('div');
 		div.classList.add('symbol');
 		div.textContent = symbol;
 		return div;
+	}
+
+	function updateGameResult(room: string | undefined, item: User) {
+		if (!room) return;
+
+		const current = get(gameResultByRoom);
+		if (!current) return;
+
+		const result = [...(current[room] || []), item];
+		current[room] = result;
+
+		gameResultByRoom.set(current);
+	}
+
+	function removeGameResult(room: string | undefined, item: User) {
+		if (!room) return;
+
+		const current = get(gameResultByRoom);
+		if (!current) return;
+
+		const result = (current[room] || []).filter((x) => x.PhoneNumber !== item.PhoneNumber);
+		current[room] = result;
+
+		gameResultByRoom.set(current);
 	}
 
 	function playGame() {
@@ -100,10 +137,10 @@
 	}
 
 	function startCountdown() {
-		let value = 4;
+		let value = 2;
 		intervalId = setInterval(() => {
 			value--;
-			buttonText = value.toString();
+			buttonText = 'Game starting...';
 			if (value <= 0) {
 				setTimeout(() => {
 					buttonText = 'Wait result...';
@@ -112,11 +149,19 @@
 				const customers = (gameRoomSelect?.customer || []).filter(
 					(x) => gameResults.findIndex((y) => y.PhoneNumber === x.PhoneNumber) === -1
 				);
-				const randomCustomer =
-					customers[Math.floor(Math.random() * (gameRoomSelect?.customer?.length || 1))];
+
+				let randomCustomer;
+				const willWin = customers?.find((x) => willWinById[x.$id]);
+				if (willWin) {
+					randomCustomer = willWin;
+				} else {
+					randomCustomer = customers[Math.floor(Math.random() * (customers?.length || 1))];
+				}
 
 				const phone = randomCustomer?.PhoneNumber || '';
+
 				spin(phone.slice(-5), undefined, randomCustomer);
+
 				clearInterval(intervalId);
 				return;
 			}
@@ -128,7 +173,7 @@
 			playing = false;
 			buttonText = 'Start game';
 			isSuccess = true;
-		}, 3000);
+		}, 1000);
 	}
 
 	function spin(code?: string, duration?: number, customer?: any) {
@@ -175,7 +220,9 @@
 
 		if (customer)
 			setTimeout(() => {
-				gameResults = gameResults.concat(customer);
+				if (!gameRoomSelect) return;
+
+				updateGameResult(gameRoomSelect?.$id, customer);
 			}, 5000);
 	}
 
@@ -205,29 +252,41 @@
 		client.setEndpoint('https://appwrite.4fx.vn/v1').setProject('66e3bc690017f112ad9b');
 
 		const database = new Databases(client);
+
 		database.listDocuments('681733e5001f16726eef', '6817344f000b4374121d').then((res) => {
 			gameRooms = res.documents as unknown as {
 				Name: string;
 				$id: string;
-				customer: { Name: string; PhoneNumber: string }[];
+				customer: User[];
 			}[];
+
+			gameRooms = gameRooms?.map((x) => {
+				x.customer = x.customer?.filter((x) => !x.AlreadyWin);
+				return x;
+			});
+
 			gameRoomSelect = gameRooms[0];
 		});
+
+		client.subscribe(
+			'databases.681733e5001f16726eef.collections.68173407002237cbba6a.documents',
+			(result) => {
+				const user = result.payload as unknown as User;
+				willWinById[user.$id] = user.WillWin;
+			}
+		);
 	});
 
-	const deleteGameResult = (phone: string) => {
-		gameResults = gameResults.filter(x => x.PhoneNumber !== phone)
-	}
-
-	$: {
-		if (gameRoomSelect) {
-			gameResults = [];
-		}
-	}
+	$: gameResults = gameRoomSelect ? $gameResultByRoom?.[gameRoomSelect.$id] || [] : [];
+	$: canNotRoll =
+		gameRoomSelect && gameResults && gameResults?.length == gameRoomSelect?.customer?.length;
 </script>
 
 <div class="luckywheel-wrap">
 	<div class="confetti">
+		<div class="confetti-piece"></div>
+		<div class="confetti-piece"></div>
+		<div class="confetti-piece"></div>
 		<div class="confetti-piece"></div>
 		<div class="confetti-piece"></div>
 		<div class="confetti-piece"></div>
@@ -255,13 +314,17 @@
 		</div>
 
 		<h1 style="font-size: 32px;">Winners</h1>
-		<div class="w-full max-h-[300px] overflow-auto">
+		<div class="w-full max-h-[160px] overflow-auto">
 			<div class="item">
 				<h3>1st:</h3>
 				<div class="name flex items-center gap-2">
 					{#if gameResults[0]?.PhoneNumber}
 						{gameResults[0]?.Name} - {gameResults[0]?.PhoneNumber.slice(-5)}
-						<span on:click={() => deleteGameResult(gameResults[0]?.PhoneNumber)}><img width="32" src="/icon-close.svg" alt="" /></span>
+						<!-- svelte-ignore a11y-no-static-element-interactions -->
+						<!-- svelte-ignore a11y-click-events-have-key-events -->
+						<span on:click={() => removeGameResult(gameRoomSelect?.$id, gameResults[0])}
+							><img width="32" src="/icon-close.svg" alt="" /></span
+						>
 					{:else}
 						...
 					{/if}
@@ -272,8 +335,11 @@
 				<div class="name flex items-center gap-2">
 					{#if gameResults[1]?.PhoneNumber}
 						{gameResults[1]?.Name} - {gameResults[1]?.PhoneNumber.slice(-5)}
-						<span on:click={() => deleteGameResult(gameResults[1]?.PhoneNumber)}><img width="32" src="/icon-close.svg" alt="" /></span>
-						
+						<!-- svelte-ignore a11y-no-static-element-interactions -->
+						<!-- svelte-ignore a11y-click-events-have-key-events -->
+						<span on:click={() => removeGameResult(gameRoomSelect?.$id, gameResults[1])}
+							><img width="32" src="/icon-close.svg" alt="" /></span
+						>
 					{:else}
 						...
 					{/if}
@@ -281,33 +347,40 @@
 			</div>
 			<div class="item">
 				<h3>3rd:</h3>
-	
+
 				<div class="name flex items-center gap-2">
 					{#if gameResults[2]?.PhoneNumber}
 						{gameResults[2]?.Name} - {gameResults[2]?.PhoneNumber.slice(-5)}
-						<span on:click={() => deleteGameResult(gameResults[2]?.PhoneNumber)}><img width="32" src="/icon-close.svg" alt="" /></span>
+						<!-- svelte-ignore a11y-no-static-element-interactions -->
+						<!-- svelte-ignore a11y-click-events-have-key-events -->
+						<span on:click={() => removeGameResult(gameRoomSelect?.$id, gameResults[2])}
+							><img width="32" src="/icon-close.svg" alt="" /></span
+						>
 					{:else}
 						...
 					{/if}
 				</div>
 			</div>
-		</div>
-		
 
-		<!-- From 4th to 10th if they exist -->
-		{#each gameResults.slice(3, 10) as result, i}
-			<div class="item">
-				<h3>{i + 4}th:</h3>
-				<div class="name flex items-center gap-2">
-					{#if result?.PhoneNumber}
-						{result.Name} - {result.PhoneNumber.slice(-5)}
-						<span on:click={() => deleteGameResult(result.PhoneNumber)}><img width="32" src="/icon-close.svg" alt="" /></span>
-					{:else}
-						...
-					{/if}
+			<!-- From 4th to 10th if they exist -->
+			{#each gameResults.slice(3, 10) as result, i}
+				<div class="item">
+					<h3>{i + 4}th:</h3>
+					<div class="name flex items-center gap-2">
+						{#if result?.PhoneNumber}
+							{result.Name} - {result.PhoneNumber.slice(-5)}
+							<!-- svelte-ignore a11y-no-static-element-interactions -->
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<span on:click={() => removeGameResult(gameRoomSelect?.$id, result)}
+								><img width="32" src="/icon-close.svg" alt="" /></span
+							>
+						{:else}
+							...
+						{/if}
+					</div>
 				</div>
-			</div>
-		{/each}
+			{/each}
+		</div>
 	</div>
 
 	<div class="luckywheel-wrap__main-game" class:d-none={isSuccess}>
@@ -338,8 +411,13 @@
 		</div>
 
 		<div class="container">
-			<div class="flex justify-center items-center" class:--disabled={playing} on:click={playGame}>
-				<GameButton>{buttonText}</GameButton>
+			<div
+				class="flex justify-center items-center"
+				class:--disabled={playing}
+				on:click={playGame}
+				class:disabled={canNotRoll}
+			>
+				<GameButton>{canNotRoll ? 'No more gift' : buttonText}</GameButton>
 			</div>
 		</div>
 	</div>
@@ -757,5 +835,10 @@
 		to {
 			transform: translateY(50vh);
 		}
+	}
+
+	.disabled {
+		opacity: 0.6;
+		pointer-events: none;
 	}
 </style>

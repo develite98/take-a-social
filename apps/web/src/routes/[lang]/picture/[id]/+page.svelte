@@ -11,7 +11,7 @@
 	import { page } from '$app/stores';
 
 	const fbAppId = '888715703203677';
-	const hashtags = '#4FxTeam #CafeChat #MarketBalance';
+	const hashtags = '#4FxOfflineHCM18052025 #4FxTrading';
 	const storage: Storage = new Storage(client);
 	const file = storage.getFilePreview('66e3be700038d5567aa5', $page.params.id) || undefined;
 	let isCopySuccess = false;

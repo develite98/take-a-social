@@ -39,7 +39,7 @@
 		<div
 			class="w-[100vw] h-[100vh] bg-white fixed top-0 left-0 z-20 flex items-center justify-center flex-col"
 		>
-			<a class="w-1/2 flex flex-col items-end" href="https://mixcore.studio/">
+			<a class="w-1/2 flex flex-col items-center" href="https://mixcore.studio/">
 				<img class="block fly-in-left" class:active={appActive} src="/logo-2.png" alt="Mixcore" />
 				<img
 					class:active={appActive}
