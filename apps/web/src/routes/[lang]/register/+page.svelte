@@ -76,11 +76,47 @@
 </script>
 
 <Page>
-	<div class="w-full h-full main-app max-w-2xl mx-auto mx-auto">
+	<div class="w-full h-full main-app max-w-2xl mx-auto mx-auto pb-24 overflow-auto">
 		<Navbar title="Đăng ký tiệc Offline">
 			<NavbarBackLink slot="left" text="Back" onClick={() => history.back()} />
 		</Navbar>
-		<BlockTitle class="text-center w-fit mx-auto">Thông tin ngân hàng</BlockTitle>
+
+		<div class="border m-4 rounded-lg bg-white">
+			<Block>🎉 Tham Gia Buổi Tiệc Offline 4FX - Kết Nối Nhà Giao Dịch!</Block>
+            <BlockTitle>🤝 Cơ hội để:</BlockTitle>
+			<Block>
+				<ul>
+					<li>🔸 Gặp gỡ đội ngũ 4FX & các trader kỳ cựu</li>
+					<li>🔸 Chia sẻ kinh nghiệm giao dịch thực chiến</li>
+					<li>🔸 Minigame – Nhận quà “chất” từ 4FX</li>
+					<li>🔸 Bia & mồi ngon + giao lưu không giới hạn!</li>
+				</ul>
+			</Block>
+			<BlockTitle>📅 Thời gian</BlockTitle>
+			<Block>
+				<div class="event-info">
+					<h2>18h00 – 22h00, Chủ Nhật, 18/05/2025</h2>
+				</div>
+			</Block>
+			<BlockTitle>📍 Địa điểm</BlockTitle>
+			<Block>
+				<div class="event-info">
+					<p>Nhà hàng Làng Nướng Nam Bộ</p>
+					<p>302A Tô Hiến Thành, Phường 15, Quận 10, TP.HCM</p>
+				</div>
+			</Block>
+			<BlockTitle>💰 Phí tham dự</BlockTitle>
+			<Block>
+				<div class="event-info">
+					<p>20 USD / người – bao gồm trọn gói và quà tặng 4FX</p>
+				</div>
+			</Block>
+		
+		</div>
+
+		<BlockTitle class="text-center w-fit mx-auto mb-[1px] !font-bold"
+			>🔐 Thanh Toán Để Xác Nhận Đăng Ký</BlockTitle
+		>
 		<Block>
 			<img
 				class="w-full max-w-[440px] mx-auto rounded border"
@@ -89,8 +125,9 @@
 			/>
 		</Block>
 		<Block strongIos outlineIos class="space-y-4">
-			<p>Quý khách vui lòng chuyển khoản theo mã trên và đính kèm ảnh chụp màn hình lại đây</p>
-			<p>Có thể đính kèm nhiều hình ảnh</p>
+			<p class="italic">
+				Hãy chụp màn hình sau khi chuyển khoản và tải lên tại đây. Đây là cơ sở để xác nhận chỗ!
+			</p>
 
 			<p>
 				<Button disabled={uploading} onClick={() => triggerFileInput()}>
@@ -113,27 +150,27 @@
 							/>
 						</svg>
 					{/if}
-					Tải hình ảnh
+					👉 Đính kèm ảnh chuyển khoản
 				</Button>
 			</p>
 		</Block>
 
-		<BlockTitle>Ảnh đã đính kèm:</BlockTitle>
+		<BlockTitle>Ảnh đính kèm:</BlockTitle>
 		<Block>
-            {#each currentImages as imageId (imageId)}
-					{#await storage?.getFilePreview('66e3be700038d5567aa5', imageId)}
-						<!-- promise is pending -->
-						<p>Loading...</p>
-					{:then value}
-						<!-- promise was fulfilled or not a Promise -->
-						<!-- svelte-ignore a11y-img-redundant-alt -->
-						<img class="w-full mb-4 rounded shadow border" alt="Image" src={value?.href} />
-					{:catch error}
-						<!-- promise was rejected -->
-						<p>Something went wrong</p>
-					{/await}
+			{#each currentImages as imageId (imageId)}
+				{#await storage?.getFilePreview('66e3be700038d5567aa5', imageId)}
+					<!-- promise is pending -->
+					<p>Loading...</p>
+				{:then value}
+					<!-- promise was fulfilled or not a Promise -->
+					<!-- svelte-ignore a11y-img-redundant-alt -->
+					<img class="w-full mb-4 rounded shadow border" alt="Image" src={value?.href} />
+				{:catch error}
+					<!-- promise was rejected -->
+					<p>Something went wrong</p>
+				{/await}
 			{/each}
-        </Block>
+		</Block>
 
 		<input
 			type="file"
