@@ -96,7 +96,9 @@
 		isApproved: boolean
 	) {
 		let result = data;
-		result = result.filter((x) => x.Name?.includes(searchText || ''));
+		result = result.filter(
+			(x) => x.Name?.includes(searchText || '') || x.Email?.includes(searchText || '')
+		);
 
 		if (type?.length) {
 			result = result.filter((x) => type?.includes(x.Type));
@@ -113,8 +115,24 @@
 		return result;
 	}
 
+	function copyText(text: string) {
+		navigator.clipboard
+			.writeText(text)
+			.then(() => {
+				console.log('Text copied to clipboard');
+			})
+			.catch((err) => {
+				console.error('Failed to copy: ', err);
+			});
+	}
+
 	function openImagePreview(id: string) {
 		const url = storage.getFilePreview('66e3be700038d5567aa5', id);
+		window.open(url, '_blank');
+	}
+
+	function openLink(id: string) {
+		const url = `https://appwrite.4fx.vn/console/project-66e3bc690017f112ad9b/databases/database-681733e5001f16726eef/collection-68173407002237cbba6a/document-${id}/data`;
 		window.open(url, '_blank');
 	}
 
@@ -275,12 +293,20 @@
 							{#each displayRightUsers as user}
 								<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
 									<th class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-										<div>
+										<!-- svelte-ignore a11y-no-static-element-interactions -->
+										<!-- svelte-ignore a11y-click-events-have-key-events -->
+										<div class="cursor-pointer" on:click={() => copyText(user.Email)}>
 											<div class="font-bold">{user.Name}</div>
 											<div class="text-sm opacity-80">{user.Email || 'N/A'}</div>
 										</div>
 									</th>
-									<td class="px-6 py-4"> {user.PhoneNumber} </td>
+									<!-- svelte-ignore a11y-no-static-element-interactions -->
+									<td class="px-6 py-4">
+										<!-- svelte-ignore a11y-no-static-element-interactions -->
+										<!-- svelte-ignore a11y-click-events-have-key-events -->
+										<!-- svelte-ignore a11y-missing-attribute -->
+										<a on:click={() => openLink(user.$id)}>{user.PhoneNumber}</a>
+									</td>
 									<td class="px-6 py-4">
 										<div class="flex items-center mb-4">
 											<input
