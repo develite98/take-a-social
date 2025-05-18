@@ -100,7 +100,7 @@
 
 		try {
 			loading = true;
-			const user = await database.createDocument(databaseId, collectionId, ID.unique(), {
+			const user = await database.updateDocument(databaseId, collectionId, $userInfo?.$id, {
 				PhoneNumber: phone,
 				Name: name || email?.toLowerCase(),
 				Email: email?.toLowerCase(),
@@ -125,7 +125,7 @@
 		try {
 			loading = true;
 			const result = await database.listDocuments(databaseId, collectionId, [
-				Query.equal('Email', email)
+				Query.equal('Email', email?.toLowerCase())
 			]);
 
 			let user;
@@ -135,7 +135,7 @@
 			} else {
 				user = await database.createDocument(databaseId, collectionId, ID.unique(), {
 					IsCheckedIn: true,
-					Email: email
+					Email: email?.toLowerCase()
 				});
 			}
 
