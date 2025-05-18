@@ -86,6 +86,7 @@
 	let playing = false;
 	let buttonText = 'Start game';
 	let intervalId: number;
+	let scrollContainer: HTMLElement;
 
 	let gameRooms: { Name: string; $id: string; customer: User[] }[];
 	let gameRoomSelect: {
@@ -298,6 +299,15 @@
 		);
 	});
 
+	const scrollToBottom = () => {
+		if (scrollContainer) {
+			setTimeout(() => {
+			scrollContainer.scrollTop = scrollContainer.scrollHeight;
+
+			}, 1000)
+		}
+	}
+
 	const filterCanNotRoll = (gameRoomSelect: any, gameResult: Record<string, User[]>, customerByRoom: User[]) => {
 		return gameRoomSelect && gameResult &&  customerByRoom?.every(customer => fullResult.some(x => x.$id === customer.$id));
 	}
@@ -306,6 +316,7 @@
 	$: gameResults = gameRoomSelect ? $gameResultByRoom?.[gameRoomSelect.$id] || [] : [];
 	$: customerByroom = gameRoomSelect?.customer?.filter(x => !x.AlreadyWin) || [];
 	$: canNotRoll = filterCanNotRoll(gameRoomSelect, $gameResultByRoom || {}, customerByroom);
+	$: gameResults, scrollToBottom();
 </script>
 
 <div class="luckywheel-wrap">
@@ -341,7 +352,7 @@
 		</div>
 
 		<h1 style="font-size: 32px;">Winners</h1>
-		<div class="w-full max-h-[160px] overflow-auto">
+		<div class="w-full max-h-[160px] overflow-auto" bind:this={scrollContainer}>
 			<div class="item">
 				<h3>1st:</h3>
 				<div class="name flex items-center gap-2">
