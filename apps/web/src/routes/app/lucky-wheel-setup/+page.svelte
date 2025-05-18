@@ -82,10 +82,10 @@
 
 	function filter(data: User[], searchText: string, type: string[], isChecked: boolean) {
 		let result = data;
-		result = result.filter((x) => x.Name.includes(searchText || ''));
+		result = result.filter((x) => x.Name?.includes(searchText || ''));
 
 		if (type?.length) {
-			result = result.filter((x) => type.includes(x.Type));
+			result = result.filter((x) => type?.includes(x.Type));
 		}
 
 		if (isChecked) {

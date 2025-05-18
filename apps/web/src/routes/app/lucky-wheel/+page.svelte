@@ -301,8 +301,6 @@
 		<div class="confetti-piece"></div>
 		<div class="confetti-piece"></div>
 	</div>
-	<!-- <mix-game-confetti *ngIf="isSuccess"
-                       class="luckywheel-wrap__game-confetti"></mix-game-confetti> -->
 
 	<div class="luckywheel-wrap__background"></div>
 
