@@ -102,8 +102,8 @@
 			loading = true;
 			const user = await database.createDocument(databaseId, collectionId, ID.unique(), {
 				PhoneNumber: phone,
-				Name: name,
-				Email: email,
+				Name: name || email?.toLowerCase(),
+				Email: email?.toLowerCase(),
 				IsCheckedIn: true
 			});
 
