@@ -146,8 +146,8 @@
 					buttonText = 'Wait result...';
 				}, 1000);
 
-				const customers = (gameRoomSelect?.customer || []).filter(
-					(x) => gameResults.findIndex((y) => y.PhoneNumber === x.PhoneNumber) === -1
+				const customers = (customerByroom || []).filter(
+					(x) => fullResult.findIndex((y) => y.PhoneNumber === x.PhoneNumber) === -1
 				);
 
 				let randomCustomer;
@@ -265,7 +265,12 @@
 				return x;
 			});
 
-			gameRoomSelect = gameRooms[0];
+			const storageId = localStorage.getItem('game-room-active') as string;
+			if (storageId) {
+				gameRoomSelect = gameRooms?.find(x => x.$id === storageId) || gameRooms[0];
+			} else {
+				gameRoomSelect =  gameRooms[0];
+			}
 		});
 
 		client.subscribe(
@@ -273,13 +278,34 @@
 			(result) => {
 				const user = result.payload as unknown as User;
 				willWinById[user.$id] = user.WillWin;
+
+				if (gameRooms) {
+					gameRooms = gameRooms?.map((x) => {
+						x.customer = x.customer?.map(customer => {
+							if (customer.$id === user.$id) {
+								customer.AlreadyWin = user.AlreadyWin;
+							}
+
+							return customer
+						})
+
+						return x;
+					});
+
+					gameRoomSelect = gameRooms?.find(x => x.$id === gameRoomSelect?.$id) || null;
+				}
 			}
 		);
 	});
 
+	const filterCanNotRoll = (gameRoomSelect: any, gameResult: Record<string, User[]>, customerByRoom: User[]) => {
+		return gameRoomSelect && gameResult &&  customerByRoom?.every(customer => fullResult.some(x => x.$id === customer.$id));
+	}
+
+	$: fullResult =  Object.values($gameResultByRoom || {}).flat();
 	$: gameResults = gameRoomSelect ? $gameResultByRoom?.[gameRoomSelect.$id] || [] : [];
-	$: canNotRoll =
-		gameRoomSelect && gameResults && gameResults?.length == gameRoomSelect?.customer?.length;
+	$: customerByroom = gameRoomSelect?.customer?.filter(x => !x.AlreadyWin) || [];
+	$: canNotRoll = filterCanNotRoll(gameRoomSelect, $gameResultByRoom || {}, customerByroom);
 </script>
 
 <div class="luckywheel-wrap">
@@ -308,7 +334,10 @@
 
 	<div class="slot-machine result-board">
 		<div class="game-room-select">
-			<Select items={gameRooms} label={'Name'} itemId={'$id'} bind:value={gameRoomSelect}></Select>
+			<Select items={gameRooms} label={'Name'} itemId={'$id'} bind:value={gameRoomSelect}  on:change={(e) => {
+				localStorage.setItem('game-room-active', e.detail?.$id);
+				window.location.reload();
+			}} ></Select>
 		</div>
 
 		<h1 style="font-size: 32px;">Winners</h1>
@@ -441,6 +470,4 @@
 
 <style lang="scss">
 	@import url('https://fonts.googleapis.com/css?family=Carter+One');
-
-	
 </style>
