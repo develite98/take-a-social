@@ -89,19 +89,6 @@
 					<li>🔸 Bia & mồi ngon + giao lưu không giới hạn!</li>
 				</ul>
 			</Block>
-			<BlockTitle>📅 Thời gian</BlockTitle>
-			<Block>
-				<div class="event-info">
-					<h2>18h00 – 22h00, Chủ Nhật, 18/05/2025</h2>
-				</div>
-			</Block>
-			<BlockTitle>📍 Địa điểm</BlockTitle>
-			<Block>
-				<div class="event-info">
-					<p>Nhà hàng Làng Nướng Nam Bộ</p>
-					<p>302A Tô Hiến Thành, Phường 15, Quận 10, TP.HCM</p>
-				</div>
-			</Block>
 			<BlockTitle>💰 Phí tham dự</BlockTitle>
 			<Block>
 				<div class="event-info">

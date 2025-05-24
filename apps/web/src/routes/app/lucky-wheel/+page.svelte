@@ -87,6 +87,7 @@
 	let buttonText = 'Start game';
 	let intervalId: number;
 	let scrollContainer: HTMLElement;
+	let databases: Databases;
 
 	let gameRooms: { Name: string; $id: string; customer: User[] }[];
 	let gameRoomSelect: {
@@ -129,11 +130,25 @@
 		gameResultByRoom.set(current);
 	}
 
-	function playGame() {
+	async function playGame() {
 		reset();
 
 		playing = true;
 		buttonText = 'Are you ready...';
+		if (gameRoomSelect) {
+			const gameRoom = await databases.getDocument(
+				'681733e5001f16726eef',
+				'6817344f000b4374121d',
+				gameRoomSelect.$id
+			);
+			if (gameRoom) {
+				gameRoomSelect = gameRoom as any;
+				gameRoom.customer?.forEach((x: any) => {
+					willWinById[x.$id] = x.WillWin;
+				});
+			}
+		}
+
 		startCountdown();
 	}
 
@@ -252,9 +267,8 @@
 
 		client.setEndpoint('https://appwrite.4fx.vn/v1').setProject('66e3bc690017f112ad9b');
 
-		const database = new Databases(client);
-
-		database.listDocuments('681733e5001f16726eef', '6817344f000b4374121d').then((res) => {
+		databases = new Databases(client);
+		databases.listDocuments('681733e5001f16726eef', '6817344f000b4374121d').then((res) => {
 			gameRooms = res.documents as unknown as {
 				Name: string;
 				$id: string;
@@ -268,9 +282,9 @@
 
 			const storageId = localStorage.getItem('game-room-active') as string;
 			if (storageId) {
-				gameRoomSelect = gameRooms?.find(x => x.$id === storageId) || gameRooms[0];
+				gameRoomSelect = gameRooms?.find((x) => x.$id === storageId) || gameRooms[0];
 			} else {
-				gameRoomSelect =  gameRooms[0];
+				gameRoomSelect = gameRooms[0];
 			}
 		});
 
@@ -278,22 +292,21 @@
 			'databases.681733e5001f16726eef.collections.68173407002237cbba6a.documents',
 			(result) => {
 				const user = result.payload as unknown as User;
-				willWinById[user.$id] = user.WillWin;
 
 				if (gameRooms) {
 					gameRooms = gameRooms?.map((x) => {
-						x.customer = x.customer?.map(customer => {
+						x.customer = x.customer?.map((customer) => {
 							if (customer.$id === user.$id) {
 								customer.AlreadyWin = user.AlreadyWin;
 							}
 
-							return customer
-						})
+							return customer;
+						});
 
 						return x;
 					});
 
-					gameRoomSelect = gameRooms?.find(x => x.$id === gameRoomSelect?.$id) || null;
+					gameRoomSelect = gameRooms?.find((x) => x.$id === gameRoomSelect?.$id) || null;
 				}
 			}
 		);
@@ -302,19 +315,26 @@
 	const scrollToBottom = () => {
 		if (scrollContainer) {
 			setTimeout(() => {
-			scrollContainer.scrollTop = scrollContainer.scrollHeight;
-
-			}, 1000)
+				scrollContainer.scrollTop = scrollContainer.scrollHeight;
+			}, 1000);
 		}
-	}
+	};
 
-	const filterCanNotRoll = (gameRoomSelect: any, gameResult: Record<string, User[]>, customerByRoom: User[]) => {
-		return gameRoomSelect && gameResult &&  customerByRoom?.every(customer => fullResult.some(x => x.$id === customer.$id));
-	}
+	const filterCanNotRoll = (
+		gameRoomSelect: any,
+		gameResult: Record<string, User[]>,
+		customerByRoom: User[]
+	) => {
+		return (
+			gameRoomSelect &&
+			gameResult &&
+			customerByRoom?.every((customer) => fullResult.some((x) => x.$id === customer.$id))
+		);
+	};
 
-	$: fullResult =  Object.values($gameResultByRoom || {}).flat();
+	$: fullResult = Object.values($gameResultByRoom || {}).flat();
 	$: gameResults = gameRoomSelect ? $gameResultByRoom?.[gameRoomSelect.$id] || [] : [];
-	$: customerByroom = gameRoomSelect?.customer?.filter(x => !x.AlreadyWin) || [];
+	$: customerByroom = gameRoomSelect?.customer?.filter((x) => !x.AlreadyWin) || [];
 	$: canNotRoll = filterCanNotRoll(gameRoomSelect, $gameResultByRoom || {}, customerByroom);
 	$: gameResults, scrollToBottom();
 </script>
@@ -345,10 +365,15 @@
 
 	<div class="slot-machine result-board">
 		<div class="game-room-select">
-			<Select items={gameRooms} label={'Name'} itemId={'$id'} bind:value={gameRoomSelect}  on:change={(e) => {
-				localStorage.setItem('game-room-active', e.detail?.$id);
-				window.location.reload();
-			}} ></Select>
+			<Select
+				items={gameRooms}
+				label={'Name'}
+				itemId={'$id'}
+				bind:value={gameRoomSelect}
+				on:change={(e) => {
+					localStorage.setItem('game-room-active', e.detail?.$id);
+				}}
+			></Select>
 		</div>
 
 		<h1 style="font-size: 32px;">Winners</h1>
