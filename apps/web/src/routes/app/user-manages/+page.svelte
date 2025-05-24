@@ -16,6 +16,7 @@
 		VolumeLots: number;
 		IsCheckedIn: boolean;
 		WillWin: boolean;
+		location: string;
 	};
 
 	type GameRoom = {
@@ -36,6 +37,7 @@
 	let selectedTypes: string[] = [];
 	let isCheckedIn: boolean = false;
 	let isApproved: boolean = false;
+	let isFromNorthSide: boolean = false;
 	let storage: Storage;
 
 	// Transfer user from one list to the other
@@ -93,7 +95,8 @@
 		searchText: string,
 		type: string[],
 		isChecked: boolean,
-		isApproved: boolean
+		isApproved: boolean,
+		isFromNorthSide: boolean
 	) {
 		let result = data;
 		result = result.filter(
@@ -106,6 +109,10 @@
 
 		if (isChecked) {
 			result = result.filter((x) => x.IsCheckedIn);
+		}
+
+		if (isFromNorthSide) {
+			result = result.filter((x) => x.location === 'HN');
 		}
 
 		if (isApproved) {
@@ -172,7 +179,7 @@
 		}
 	}
 
-	$: displayRightUsers = filter(rightUsers, searchText, selectedTypes, isCheckedIn, isApproved);
+	$: displayRightUsers = filter(rightUsers, searchText, selectedTypes, isCheckedIn, isApproved, isFromNorthSide);
 </script>
 
 <div class="bg-gray-50 min-h-screen p-6 flex flex-col items-center font-sans">
@@ -245,6 +252,24 @@
 								class="rounded-md border border-slate-300 py-0.5 px-2.5 text-center text-sm transition-all shadow-sm text-slate-600"
 							>
 								Party approved
+							</button>
+						{/if}
+					</div>
+
+					<div class="me-2 pe-4 border-r">
+						{#if isFromNorthSide}
+							<button
+								on:click={() => (isFromNorthSide = false)}
+								class="rounded-md bg-slate-800 py-0.5 px-2.5 border border-transparent text-sm text-white transition-all shadow-sm"
+							>
+							Hà Nội
+							</button>
+						{:else}
+							<button
+								on:click={() => (isFromNorthSide = true)}
+								class="rounded-md border border-slate-300 py-0.5 px-2.5 text-center text-sm transition-all shadow-sm text-slate-600"
+							>
+								Hà Nội
 							</button>
 						{/if}
 					</div>

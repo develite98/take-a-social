@@ -29,6 +29,7 @@
 	let phone = '';
 	let name = '';
 	let email = '';
+	let zaloName = '';
 	let userInfo = persisted<any | null>('userData', null);
 	let loading = false;
 
@@ -104,7 +105,9 @@
 				PhoneNumber: phone,
 				Name: name || email?.toLowerCase(),
 				Email: email?.toLowerCase(),
-				IsCheckedIn: true
+				ZaloName: zaloName,
+				IsCheckedIn: true,
+				location: 'HN'
 			});
 
 			userInfo.set(user);
@@ -185,7 +188,7 @@
 					<input
 						bind:value={email}
 						class="w-full bg-transparent placeholder:text-slate-200 text-slate-200 text-sm border border-slate-200 rounded-md px-4 py-3 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-						placeholder="Nhập email..."
+						placeholder="Nhập email Exness..."
 					/>
 				</div>
 
@@ -251,6 +254,14 @@
 							bind:value={phone}
 							class="w-full bg-transparent placeholder:text-slate-200 text-slate-200 text-sm border border-slate-200 rounded-md px-4 py-3 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
 							placeholder="Nhập số điện thoại..."
+						/>
+					</div>
+
+					<div class="w-full max-w-sm min-w-[200px] mb-2">
+						<input
+							bind:value={zaloName}
+							class="w-full bg-transparent placeholder:text-slate-200 text-slate-200 text-sm border border-slate-200 rounded-md px-4 py-3 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+							placeholder="Nhập tên Zalo..."
 						/>
 					</div>
 
@@ -347,7 +358,7 @@
 		</div>
 
 		<div class="mt-12 w-full flex flex-col items-center">
-			<img class="w-[60%] max-w-[300px] h-auto" alt="4Fx" src="footer-text.svg" />
+			<img class="w-[60%] max-w-[300px] h-auto" alt="4Fx" src="/text-foot.svg" />
 		</div>
 	</div>
 
