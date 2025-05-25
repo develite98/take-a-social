@@ -17,6 +17,7 @@
 		IsCheckedIn: boolean;
 		WillWin: boolean;
 		location: string;
+		ZaloName: string;
 	};
 
 	type GameRoom = {
@@ -100,7 +101,7 @@
 	) {
 		let result = data;
 		result = result.filter(
-			(x) => x.Name?.includes(searchText || '') || x.Email?.includes(searchText || '')
+			(x) => x.Name?.includes(searchText || '') || x.Email?.includes(searchText || '') || x.ZaloName?.includes(searchText || '')
 		);
 
 		if (type?.length) {
@@ -322,7 +323,8 @@
 										<!-- svelte-ignore a11y-click-events-have-key-events -->
 										<div class="cursor-pointer" on:click={() => copyText(user.Email)}>
 											<div class="font-bold">{user.Name}</div>
-											<div class="text-sm opacity-80">{user.Email || 'N/A'}</div>
+											<div class="text-sm opacity-80">Email: {user.Email || 'N/A'}</div>
+											<div class="text-sm opacity-80">Zalo: {user.ZaloName || 'N/A'}</div>
 										</div>
 									</th>
 									<!-- svelte-ignore a11y-no-static-element-interactions -->
