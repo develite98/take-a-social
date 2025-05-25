@@ -10,6 +10,7 @@
 		PhoneNumber: string;
 		Type: string;
 		IsCheckedIn: boolean;
+		location: string;
 	};
 
 	type GameRoom = {
@@ -29,6 +30,7 @@
 	let types = ['Guest', 'Trial', 'Premier'];
 	let selectedTypes: string[] = [];
 	let isCheckedIn: boolean = false;
+	let isFromNorthSide: boolean = false;
 
 	// Transfer user from one list to the other
 	async function addUserToRoom(user: User) {
@@ -80,12 +82,16 @@
 		}
 	}
 
-	function filter(data: User[], searchText: string, type: string[], isChecked: boolean) {
+	function filter(data: User[], searchText: string, type: string[], isChecked: boolean, isFromNorthSide: boolean) {
 		let result = data;
 		result = result.filter((x) => x.Name?.includes(searchText || ''));
 
 		if (type?.length) {
 			result = result.filter((x) => type?.includes(x.Type));
+		}
+
+		if (isFromNorthSide) {
+			result = result.filter((x) => x.location === 'HN');
 		}
 
 		if (isChecked) {
@@ -109,7 +115,7 @@
 		}
 	}
 
-	$: displayRightUsers = filter(rightUsers, searchText, selectedTypes, isCheckedIn);
+	$: displayRightUsers = filter(rightUsers, searchText, selectedTypes, isCheckedIn, isFromNorthSide);
 </script>
 
 <div class="bg-gray-50 min-h-screen p-6 flex flex-col items-center font-sans">
@@ -234,6 +240,24 @@
 								class="rounded-md border border-slate-300 py-0.5 px-2.5 text-center text-sm transition-all shadow-sm text-slate-600"
 							>
 								Checked in
+							</button>
+						{/if}
+					</div>
+
+					<div class="me-2 pe-4 border-r">
+						{#if isFromNorthSide}
+							<button
+								on:click={() => (isFromNorthSide = false)}
+								class="rounded-md bg-slate-800 py-0.5 px-2.5 border border-transparent text-sm text-white transition-all shadow-sm"
+							>
+								HN
+							</button>
+						{:else}
+							<button
+								on:click={() => (isFromNorthSide = true)}
+								class="rounded-md border border-slate-300 py-0.5 px-2.5 text-center text-sm transition-all shadow-sm text-slate-600"
+							>
+								HN
 							</button>
 						{/if}
 					</div>
